@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/userTopbar.css">
+<link rel="stylesheet" href="/css/userSidebar.css">
+<link rel="stylesheet" href="/css/gym-form1.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<%- include('../partials/userTopbar', { title: title }) %>
+
+<div class="container">
+
+  <%- include('../partials/userSidebar', { page: 'memberships' }) %>
+
+  <div class="main">
+    <div class="membership-card">
+
+      <div class="membership-title">
+        <img src="/img/Expired date.png" style="width:50px;">
+        Fitness Station
+      </div>
+
+      <form action="/user/gym-form1" method="POST" enctype="multipart/form-data">
+
+        <input type="hidden" name="planType" id="selectedPlan">
+        
+        <div class="form-grid">
+
+          <div>
+            <div class="section-title">I. Personal Information</div>
+
+            <input type="text" name="givenName" placeholder="Given Name"
+              value="<%= user.givenName || '' %>" required>
+
+            <input type="text" name="surname" placeholder="Surname"
+              value="<%= user.surname || '' %>" required>
+
+            <input type="text" name="middleName" placeholder="Middle Name"
+              value="<%= user.middleName || '' %>">
+
+            <input type="text" name="citizenship" placeholder="Citizenship"
+              value="<%= user.citizenship || '' %>" required>
+
+            <input type="date" name="birthdate"
+              value="<%= user.birthdate ? new Date(user.birthdate).toISOString().split('T')[0] : '' %>" required>
+
+            <input type="text" name="contact" placeholder="Contact Details"
+              value="<%= user.contact || '' %>" required>
+
+
+            <div class="section-title">II. Ownership Type & Address</div>
+
+            <select name="ownershipType" id="ownershipType" required>
+              <option value="">Select Resident Type</option>
+              <option value="Homeowner" <%= user.ownershipType === 'Homeowner' ? 'selected' : '' %>>Homeowner</option>
+              <option value="Tenant" <%= user.ownershipType === 'Tenant' ? 'selected' : '' %>>Tenant</option>
+            </select>
+
+            <input type="text" name="village" placeholder="Village"
+              value="<%= user.village || '' %>" required>
+
+            <input type="text" name="blockLot" placeholder="Block & Lot"
+              value="<%= user.blockLot || '' %>" required>
+
+            <input type="text" name="referenceNumber" placeholder="Reference No."
+              value="<%= user.referenceNumber || '' %>">
+
+
+            <div class="section-title">For Tenants Only</div>
+
+            <div class="row">
+              <input type="date" name="leaseStart" id="leaseStart"
+                value="<%= user.leaseStart ? new Date(user.leaseStart).toISOString().split('T')[0] : '' %>">
+
+              <input type="date" name="leaseEnd" id="leaseEnd"
+                value="<%= user.leaseEnd ? new Date(user.leaseEnd).toISOString().split('T')[0] : '' %>">
+            </div>
+          </div>
+
+          <div>
+            <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+              <input type="file" name="profilePic" id="fileInput" accept="image/*" onchange="previewImage(event)">
+              
+              <img id="preview" class="upload-preview" <%= user.profilePic ? `src="${user.profilePic}" style="display:block;"` : 'style="display:none;"' %>>
+
+              <div id="uploadContent" <%= user.profilePic ? 'style="display:none;"' : '' %>>
+                <img src="/img/upload-button-green.png">
+                <p>Click or drag file to upload 1×1 picture</p>
+              </div>
+            </div>
+
+            <div style="margin-top:90px;">
+              <div class="section-title">
+                IN CASE OF EMERGENCY, NOTIFY:
+              </div>
+
+              <input type="text" name="emergencyName" placeholder="Full Name"
+                value="<%= user.emergencyName || '' %>" required>
+
+              <input type="text" name="emergencyContact" placeholder="Contact No."
+                value="<%= user.emergencyContact || '' %>" required>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="actions">
+          <button class="btn-delete" type="button" onclick="removeImage()">
+            <img src="/img/delete-button.png">
+          </button>
+
+          <button class="btn-next" type="submit">Next</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// =============================
+// TENANT REQUIRED LOGIC
+// =============================
+const ownershipType = document.getElementById("ownershipType");
+const leaseStart = document.getElementById("leaseStart");
+const leaseEnd = document.getElementById("leaseEnd");
+
+function toggleTenantFields(){
+  // 🔥 UPDATED TO CHECK FOR "Tenant"
+  if(ownershipType.value === "Tenant"){
+    leaseStart.required = true;
+    leaseEnd.required = true;
+  } else {
+    leaseStart.required = false;
+    leaseEnd.required = false;
+  }
+}
+
+// run on change
+ownershipType.addEventListener("change", toggleTenantFields);
+
+// run on load (important if prefilled)
+window.onload = toggleTenantFields;
+
+
+// =============================
+// IMAGE PREVIEW
+// =============================
+function previewImage(event){
+  const input = event.target;
+  const preview = document.getElementById("preview");
+  const uploadContent = document.getElementById("uploadContent");
+
+  if(input.files && input.files[0]){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      preview.src = e.target.result;
+      preview.style.display = "block";
+      uploadContent.style.display = "none";
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function removeImage(){
+  const fileInput = document.getElementById("fileInput");
+  const preview = document.getElementById("preview");
+  const uploadContent = document.getElementById("uploadContent");
+
+  fileInput.value = "";
+  preview.src = "";
+  preview.style.display = "none";
+  uploadContent.style.display = "block";
+}
+// =============================
+// CATCH PLAN FROM URL
+// =============================
+const urlParams = new URLSearchParams(window.location.search);
+const plan = urlParams.get('plan'); // Gets "Monthly", "Quarterly", etc.
+
+if (plan) {
+  document.getElementById('selectedPlan').value = plan;
+}
+</script>
+
+</body>
+</html>

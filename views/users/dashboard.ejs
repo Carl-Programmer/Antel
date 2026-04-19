@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ✅ TOPBAR -->
+<%- include('../partials/userTopbar') %>
+
+<div class="container">
+
+  <!-- ✅ SIDEBAR -->
+  <%- include('../partials/userSidebar') %>
+
+  <!-- ✅ MAIN CONTENT -->
+  <div class="main">
+    <div class="dashboard">
+
+      <div>
+        <div class="card">
+          <h3>My Status</h3>
+          <div class="status-grid">
+          <div class="status-box"><img src="/img/bill-pdf.png"><div>Due: 03/21/26</div></div>
+          <div class="status-box"><img src="/img/bill-pdf.png"><div>Due: 03/21/26</div></div>
+          <div class="status-box"><img src="/img/Expired date.png"><div>Expired: 03/21/26</div></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:30px;">
+          <h3>Announcement</h3>
+          <div class="announcement-item"><img src="/img/announcement-bill-logo.png"><div class="announce-text">Your water bill is now available. Click to view.</div><div class="announce-date">03/01/26</div></div>
+          <div class="announcement-item"><img src="/img/announcement-bill-logo.png"><div class="announce-text">Your monthly due bill is now available. Click to view.</div><div class="announce-date">03/11/26</div></div>
+          <div class="announcement-item"><img src="/img/save the date.png"><div class="announce-text">SAVE THE DATE! Join us this February 14, 2026.</div><div class="announce-date">02/07/26</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <!-- calendar -->
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title || "Login" %></title>
+
+<link rel="stylesheet" href="/css/login.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="login-card">
+    <h1>LOGIN</h1>
+
+    <!-- ✅ FORM START -->
+    <form action="/login" method="POST">
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" name="email" required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <div class="password-wrapper">
+                <input type="password" name="password" id="password" required>
+
+                <span class="toggle-eye" onclick="togglePassword()">
+                    <img id="eyeIcon" src="/img/toggle-eye-button.png" alt="Toggle">
+                </span>
+            </div>
+        </div>
+
+        <div class="forgot">
+            <a href="/forgot">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">LOGIN</button>
+
+    </form>
+    <!-- ✅ FORM END -->
+
+    <div class="create-account">
+        <a href="/signup">Create an account?</a>
+    </div>
+</div>
+
+<div class="logo-area">
+    <img src="/img/antel-logo.png" alt="Logo">
+</div>
+
+<script>
+function togglePassword() {
+    const password = document.getElementById("password");
+    const eyeIcon = document.getElementById("eyeIcon");
+
+    if (password.type === "password") {
+        password.type = "text";
+        eyeIcon.src = "/img/eye-open.png";
+    } else {
+        password.type = "password";
+        eyeIcon.src = "/img/eye-close.png";
+    }
+}
+</script>
+
+</body>
+</html>

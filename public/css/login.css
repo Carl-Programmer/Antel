@@ -1,0 +1,148 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: url("img/bg.png") no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    padding-left: 100px;
+    position: relative;
+}
+
+/* LOGIN CARD */
+.login-card {
+    width: 480px;
+    background: rgba(29, 78, 29, 0.85);
+    padding: 90px 40px;
+    border-radius: 25px;
+    color: white;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+    border-color: #FFFFFF;
+    border: solid;
+}
+
+/* TITLE */
+.login-card h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 30px;
+    letter-spacing: 2px;
+}
+
+/* INPUT GROUP */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+/* PASSWORD FIELD */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 45px;
+}
+
+/* TOGGLE */
+.toggle-eye {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.toggle-eye img {
+    width: 22px;
+    height: 22px;
+}
+
+/* LINKS */
+.forgot {
+    text-align: right;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+
+.forgot a {
+    color: #e6e6e6;
+    text-decoration: underline;
+}
+
+.forgot a:hover {
+    text-decoration: underline;
+}
+
+/* BUTTON */
+.login-btn {
+    width: 42%;
+    padding:15px;
+    border-radius: 30px;
+    border: solid;
+    border-color: white;
+    background: #82F65B;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 120px;
+}
+
+.login-btn:hover {
+    background: #82F65B;
+    transform: translateY(-2px);
+}
+
+/* CREATE ACCOUNT */
+.create-account {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+}
+
+.create-account a {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* LOGO AREA */
+.logo-area {
+    position: absolute;
+    bottom:580px;
+    right: 700px;
+}
+
+.logo-area img {
+    width: 220px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    body {
+        justify-content: center;
+        padding-left: 0;
+    }
+
+    .logo-area {
+        display: none;
+    }
+}

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Due Bills</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#e5e5e5;
+}
+
+/* HEADER */
+
+.header{
+height:90px;
+background:#e9e9e9;
+display:flex;
+align-items:center;
+padding:0 40px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.header-left{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.header-logo{
+width:115px;
+}
+
+.header-left h2{
+color:#103703;
+font-weight:700;
+font-size:24px;
+}
+
+/* LAYOUT */
+
+.container{
+display:flex;
+width:100%;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+background:#eeeeee;
+height:calc(100vh - 90px);
+padding:30px 15px;
+display:flex;
+flex-direction:column;
+border-right:1px solid #dcdcdc;
+}
+
+.sidebar-menu{
+flex:1;
+}
+
+.menu-item{
+display:flex;
+align-items:center;
+gap:15px;
+padding:14px 18px;
+border-radius:20px;
+margin-bottom:20px;
+cursor:pointer;
+font-size:15px;
+transition:0.2s ease;
+}
+
+.menu-item img{
+width:28px;
+}
+
+.menu-item span{
+font-weight:500;
+color:#2f2f2f;
+}
+
+.menu-item:hover{
+background:#d7f0d4;
+}
+
+.menu-item.active{
+background:#cfe9c9;
+font-weight:600;
+box-shadow:0 4px 8px rgba(0,0,0,0.12);
+}
+
+.sidebar-logout{
+display:flex;
+align-items:center;
+gap:15px;
+padding:14px 18px;
+border-top:1px solid #dcdcdc;
+cursor:pointer;
+}
+
+.sidebar-logout img{
+width:26px;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.dashboard-wrapper{
+background:#f4f4f4;
+border-radius:22px;
+padding:35px;
+box-shadow:0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* BACK BUTTON */
+
+.back-btn{
+width:40px;
+height:40px;
+border-radius:50%;
+background:#2f5b1d;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:20px;
+margin-bottom:20px;
+cursor:pointer;
+text-decoration:none;
+}
+
+/* UPLOAD BOX */
+
+.upload-box{
+background:#eaeaea;
+padding:25px;
+border-radius:20px;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.users{
+font-weight:600;
+margin-bottom:10px;
+}
+
+.village{
+margin-bottom:15px;
+}
+
+/* UPLOAD BUTTON */
+
+.upload-trigger{
+display:flex;
+align-items:center;
+gap:10px;
+background:#103703;
+color:white;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+width:180px;
+margin-bottom:15px;
+}
+
+.upload-trigger img{
+width:18px;
+}
+
+/* PDF AREA */
+
+.pdf-area{
+background:#0b3d02;
+padding:20px;
+border-radius:18px;
+}
+
+.pdf-grid{
+background:white;
+padding:20px;
+border-radius:16px;
+display:grid;
+grid-template-columns:repeat(8,1fr);
+gap:18px;
+min-height:120px;
+}
+
+/* PDF ITEM */
+
+.pdf-item{
+position:relative;
+text-align:center;
+font-size:11px;
+}
+
+.pdf-item img{
+width:38px;
+display:block;
+margin:auto;
+margin-bottom:5px;
+}
+
+/* REMOVE BUTTON */
+
+.remove-btn{
+position:absolute;
+top:-6px;
+right:-6px;
+background:#ff3b3b;
+color:white;
+width:18px;
+height:18px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+cursor:pointer;
+}
+
+/* NOTE */
+
+.note{
+color:white;
+font-size:11px;
+margin-top:10px;
+}
+
+/* DATE */
+
+.date-area{
+margin-top:25px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.date-area input{
+padding:8px 12px;
+border-radius:20px;
+border:1px solid #ccc;
+}
+
+/* CERTIFY */
+
+.certify{
+margin-top:18px;
+font-size:14px;
+}
+
+/* UPLOAD BUTTON */
+
+.upload-btn{
+margin-top:25px;
+display:flex;
+justify-content:center;
+}
+
+.upload-btn button{
+padding:10px 40px;
+border-radius:25px;
+border:2px solid #6ce04a;
+background:white;
+font-weight:600;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="header-left">
+<img src="img/antel-logo.png" class="header-logo">
+<h2>Manage Due Bills</h2>
+</div>
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="sidebar-menu">
+
+<div class="menu-item">
+<img src="img/Dashboard.png">
+<span>Dashboard</span>
+</div>
+
+<div class="menu-item">
+<img src="img/Due Bill.png">
+<span>Manage Users</span>
+</div>
+
+<div class="menu-item active">
+<img src="img/Book apoinment.png">
+<span>Manage Monthly Bills</span>
+</div>
+
+<div class="menu-item">
+<img src="img/Memberships.png">
+<span>Manage Appointment</span>
+</div>
+
+<div class="menu-item">
+<img src="img/Personal Info.png">
+<span>Manage Memberships</span>
+</div>
+
+<div class="menu-item">
+<img src="img/Help.png">
+<span>Other Concerns</span>
+</div>
+
+<div class="menu-item">
+<img src="img/Settings.png">
+<span>Feedbacks</span>
+</div>
+
+</div>
+
+<div class="sidebar-logout">
+<img src="img/logout-button.png">
+<span>Logout</span>
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="dashboard-wrapper">
+
+<a href="admin-upload-due-bill.html" class="back-btn">❮</a>
+
+<div class="upload-box">
+
+<div class="users">
+No. of Selected Users: <span style="color:#4cd137">200</span>
+</div>
+
+<div class="village">
+Village: All
+</div>
+
+<div class="upload-trigger" onclick="document.getElementById('fileInput').click()">
+<img src="img/upload-file.png">
+Upload Files
+</div>
+
+<input type="file" id="fileInput" multiple accept=".pdf" style="display:none">
+
+<div class="pdf-area">
+
+<div class="pdf-grid" id="pdfGrid"></div>
+
+<div class="note">
+Note: Click or drag the files (pdf) to upload.<br>
+When uploading the bill, make sure the file name is correct and align to the homeowner ref no.
+</div>
+
+</div>
+
+<div class="date-area">
+Enter Due Date:
+<input type="date">
+</div>
+
+<div class="certify">
+<input type="checkbox">
+I hereby certify that all information above is true and correct.
+</div>
+
+<div class="upload-btn">
+<button>Upload</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const fileInput = document.getElementById("fileInput");
+const pdfGrid = document.getElementById("pdfGrid");
+
+fileInput.addEventListener("change", function(){
+
+const files = fileInput.files;
+
+for(let i=0;i<files.length;i++){
+
+const file = files[i];
+
+const item = document.createElement("div");
+item.className = "pdf-item";
+
+item.innerHTML = `
+<div class="remove-btn">✖</div>
+<img src="pdf-image">
+${file.name}
+`;
+
+pdfGrid.appendChild(item);
+
+const removeBtn = item.querySelector(".remove-btn");
+
+removeBtn.onclick = function(){
+item.remove();
+};
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

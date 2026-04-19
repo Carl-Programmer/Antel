@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership</title>
+</head>
+<body>
+    <%- include('../partials/adminTopbar', { title: title }) %>
+<div class="container">
+  <%- include('../partials/adminSidebar', { page: 'memberships' }) %>
+
+  <div class="main">
+    <h2>Manage Memberships</h2>
+
+    <a href="/admin/memberships/gym" class="card-btn">
+      Fitness Station
+    </a>
+  </div>
+</div>
+</body>
+</html>

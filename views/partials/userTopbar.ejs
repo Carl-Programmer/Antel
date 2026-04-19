@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="/css/userTopbar.css">
+
+<div class="header">
+  <div class="header-left">
+    <img src="/img/antel-logo.png" class="header-logo">
+    <h2><%= title %></h2>
+  </div>
+
+  <div class="header-right">
+    <div class="search-container">
+      <img src="/img/Search.png" class="search-icon">
+      <input type="text" placeholder="Search">
+      <img src="/img/ex-button.png" class="search-close">
+    </div>
+
+<div class="header-icons">
+      <div class="icon-circle"><img src="/img/Ring bell.png"></div>
+      
+      <a href="/user/profile">
+        <div class="icon-circle">
+          <img src="<%= (locals.user && user.profilePic) ? user.profilePic : '/img/profile-logo.png' %>" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/userTopbar.css">
+<link rel="stylesheet" href="/css/userSidebar.css">
+<link rel="stylesheet" href="/css/gym-payment.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<%- include('../partials/userTopbar', { title: title }) %>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <%- include('../partials/userSidebar', { page: 'memberships' }) %>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="membership-card">
+
+      <!-- TITLE -->
+      <div class="section-title">
+        <img src="/img/Expired date.png">
+        <span>Fitness Station</span>
+      </div>
+
+      <!-- MEMBERSHIP TYPE -->
+      <div class="info-row">
+        <div class="info-label">Membership Type:</div>
+        <div class="info-value">
+          <%= membership.planType.toUpperCase() %>
+        </div>
+      </div>
+
+      <!-- AMOUNT (computed here) -->
+      <%
+        let price = 0;
+        if (membership.planType === 'Monthly') price = 1500;
+        if (membership.planType === 'Quarterly') price = 4000;
+        if (membership.planType === 'Semi-Annually') price = 6000;
+        if (membership.planType === 'Annually') price = 10000;
+      %>
+
+      <div class="info-row">
+        <div class="info-label">Amount:</div>
+        <div class="info-value">
+          ₱ <%= price.toLocaleString() %>
+        </div>
+      </div>
+
+      <!-- BANK -->
+      <div class="section-title" style="margin-top:60px;">
+        <img src="/img/bank-payment-logo.png">
+        <span>Online Bank Payment</span>
+      </div>
+
+      <div class="payment-details">
+        <strong>Bank Name:</strong> ASIA UNITED BANK (AUB)<br>
+        <strong>Account Name:</strong> ANTEL GRAND VILLAGE HOMEOWNERS ASSOCIATION INC. (AGVHOAI)<br>
+        <strong>Account Number:</strong> 110-01-000110-8
+      </div>
+
+      <!-- UPLOAD -->
+      <div class="upload-section">
+        <button class="upload-btn" onclick="openModal()">
+          <img src="/img/upload-receipt-button.png">
+          Upload Receipt
+        </button>
+      </div>
+
+      <div class="note">
+        Alternatively, you may settle your balance via AUB kiosk or the Hello Money app by selecting AGVHOAI.
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ================= MODAL ================= -->
+<div class="overlay" id="uploadModal">
+  <div class="modal">
+
+    <!-- FORM -->
+    <form action="/user/gym-payment" method="POST" enctype="multipart/form-data">
+
+      <!-- IMPORTANT -->
+      <input type="hidden" name="membershipId" value="<%= membership._id %>">
+
+      <input type="file" name="receipt" id="fileInput" accept=".jpg,.jpeg,.png,.pdf" hidden required>
+
+      <div class="upload-area" id="uploadArea">
+        <img src="/img/upload-button-green.png">
+        <span id="fileName" style="display:block;margin-top:10px;color:#103703;font-weight:500;"></span>
+      </div>
+
+      <div class="modal-note">
+        Note: Upload receipt (jpg/png/pdf).
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="delete-btn" id="deleteBtn">
+          <img src="/img/delete-button.png">
+        </button>
+
+        <button type="submit" class="submit-btn">Submit</button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="overlay" id="successModal">
+  <div class="success-box">
+    <img src="/img/check-logo.png" style="width:100px;">
+    <h2>Payment Submitted!</h2>
+    <p>Please wait for admin approval.</p>
+  </div>
+</div>
+
+<script>
+
+// OPEN MODAL
+function openModal(){
+  document.getElementById("uploadModal").style.display="flex";
+}
+
+const modal = document.getElementById("uploadModal");
+const fileInput = document.getElementById("fileInput");
+const uploadArea = document.getElementById("uploadArea");
+const fileName = document.getElementById("fileName");
+const deleteBtn = document.getElementById("deleteBtn");
+
+// CLOSE MODAL
+modal.addEventListener("click", function(e){
+  if(e.target.id==="uploadModal"){
+    modal.style.display="none";
+  }
+});
+
+// CLICK TO UPLOAD
+uploadArea.addEventListener("click", function(){
+  fileInput.click();
+});
+
+// SHOW FILE NAME
+fileInput.addEventListener("change", function(){
+  if(fileInput.files.length > 0){
+    fileName.textContent = fileInput.files[0].name;
+  }
+});
+
+// DELETE FILE
+deleteBtn.addEventListener("click", function(){
+  fileInput.value = "";
+  fileName.textContent = "";
+});
+
+</script>
+
+</body>
+</html>

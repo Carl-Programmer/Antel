@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/appointment.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ✅ TOPBAR -->
+<%- include('../partials/userTopbar') %>
+
+<div class="container">
+
+  <!-- ✅ SIDEBAR -->
+  <%- include('../partials/userSidebar') %>
+
+  <!-- ✅ MAIN -->
+  <div class="main">
+    <div class="appointment-wrapper">
+      <div class="appointment-grid">
+
+        <div class="appointment-card" onclick="window.location.href='/user/id'">
+          <img src="/img/id-logo.png">
+          <h3>I.D.</h3>
+        </div>
+
+        <div class="appointment-card">
+          <img src="/img/ownership-logo.png">
+          <h3>Change of Ownership</h3>
+        </div>
+
+        <div class="appointment-card" onclick="window.location.href='/user/move-in'">
+          <img src="/img/movein-logo.png">
+          <h3>Move In</h3>
+        </div>
+
+        <div class="appointment-card">
+          <img src="/img/moveout-logo.png">
+          <h3>Move Out</h3>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

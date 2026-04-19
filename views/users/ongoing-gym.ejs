@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+
+<link rel="stylesheet" href="/css/userTopbar.css">
+<link rel="stylesheet" href="/css/userSidebar.css">
+<link rel="stylesheet" href="/css/ongoing-gym.css">
+</head>
+<body>
+
+<%- include('../partials/userTopbar', { title: 'Fitness Station' }) %>
+
+<div class="container">
+
+  <%- include('../partials/userSidebar', { page: 'memberships' }) %>
+
+  <div class="main">
+    <div class="membership-card">
+
+      <div class="status-title">
+        <img src="/img/Expired date.png" style="width:50px;">
+        My Status
+      </div>
+
+      <!-- STATUS -->
+      <div class="status-wrapper">
+        <div class="status-cards">
+
+          <div class="status-box">
+            <h4>My Current Plan:</h4>
+            <h2><%= membership?.planType || 'No Active Plan' %></h2>
+          </div>
+
+          <div class="status-box">
+            <h4>Days Remaining:</h4>
+            <h2>
+            <% if (membership.status === 'pending') { %>
+                  <p style="font-size:12px; color:gray; margin-top:5px;">
+                        Your membership will activate once approved by admin.
+                    </p>
+            <% } else if (membership.daysRemaining !== undefined) { %>
+                <%= membership.daysRemaining %> Days
+            <% } else { %>
+                N/A
+            <% } %>
+            </h2>
+          </div>
+
+          <div class="status-box">
+            <h4>Logbook:</h4>
+            <a href="/user/logbook">
+              <img src="/img/logbook.png" style="cursor:pointer;">
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PLANS -->
+      <div class="plans">
+
+        <% const plans = [
+          { name: 'MONTHLY', price: 1500 },
+          { name: 'QUARTERLY', price: 4000 },
+          { name: 'SEMI-ANNUALLY', price: 6000 },
+          { name: 'ANNUALLY', price: 10000 }
+        ]; %>
+
+        <% plans.forEach(plan => { %>
+          <div class="plan-card">
+            <div class="plan-header"><%= plan.name %></div>
+
+            <div class="plan-body">
+              <div class="price">₱ <%= plan.price.toLocaleString() %>.00</div>
+
+              <% if (membership && membership.planType === plan.name && membership.status === 'approved') { %>
+                <div class="active-status">● Active</div>
+              <% } %>
+
+              <a href="/user/gym-form1?plan=<%= plan.name %>">
+                <button class="plan-btn">Renew</button>
+              </a>
+            </div>
+          </div>
+        <% }) %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/settings.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ✅ TOPBAR -->
+<%- include('../partials/userTopbar') %>
+
+<div class="container">
+
+  <!-- ✅ SIDEBAR -->
+  <%- include('../partials/userSidebar') %>
+
+  <!-- ✅ MAIN -->
+  <div class="main">
+    <div class="settings-container">
+
+      <!-- MY PROFILE -->
+      <div class="setting-item" onclick="window.location.href='/user/profile'">
+        <div class="setting-left">
+          <div class="arrow">›</div>
+          <div class="setting-text">My Profile</div>
+        </div>
+      </div>
+
+      <!-- CHANGE PASSWORD -->
+      <div class="setting-item" onclick="window.location.href='/user/change-password'">
+        <div class="setting-left">
+          <div class="arrow">›</div>
+          <div class="setting-text">Change Password</div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div class="setting-item">
+        <div class="setting-left">
+          <div class="arrow">›</div>
+          <div class="setting-text">Notifications</div>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- AUTO FILL -->
+      <div class="setting-item">
+        <div class="setting-left">
+          <div class="arrow">›</div>
+          <div class="setting-text">Auto fill</div>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

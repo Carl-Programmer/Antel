@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="/css/admin/dashboard.css">
+</head>
+
+<body>
+
+<%- include('../partials/adminTopbar', { title: 'Dashboard' }) %>
+
+<div class="container">
+
+  <%- include('../partials/adminSidebar', { page: 'dashboard' }) %>
+
+  <div class="main">
+
+    <div class="dashboard-wrapper">
+
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Village:</label>
+          <select>
+            <option>Select Village</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Block:</label>
+          <select>
+            <option>Select Block</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="cards">
+
+        <div class="stat-card">
+          <h3>User</h3>
+          <div class="stat-number">120</div>
+          <p>Total Users</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Pending Dues</h3>
+          <div class="stat-number">67</div>
+          <p>Total of Unpaid Users</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Appointment</h3>
+          <div class="stat-number">24</div>
+          <p>Active Appointment</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Gym Members</h3>
+          <div class="stat-number">15</div>
+          <p>Active Members</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Other Concerns</h3>
+          <div class="stat-number">2</div>
+          <p>Active Concerns</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Feedbacks</h3>
+          <div class="stat-number">15</div>
+          <p>Ongoing Feedbacks</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-modal" id="logoutModal">
+  <div class="logout-box">
+    <h2>Would you like to Logout?</h2>
+    <img src="/img/antel-logo.png" class="logout-logo">
+    <div class="logout-buttons">
+      <button class="btn-yes" onclick="confirmLogout()">YES</button>
+      <button class="btn-no" onclick="closeLogout()">NO</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const logoutBtn = document.getElementById("logoutBtn");
+const logoutModal = document.getElementById("logoutModal");
+
+logoutBtn.onclick = function(){
+  logoutModal.classList.add("active");
+}
+
+function closeLogout(){
+  logoutModal.classList.remove("active");
+}
+
+function confirmLogout(){
+  fetch('/logout', { method: 'POST' })
+  .then(() => {
+    window.location.href = '/login';
+  });
+}
+</script>
+
+</body>
+</html>

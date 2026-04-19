@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Move Out Clearance</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:'Inter', sans-serif;
+background:#dcdcdc;
+}
+
+/* HEADER */
+
+.header{
+height:90px;
+background:#e9e9e9;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 30px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.header-left{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.header-logo{
+width:115px;
+}
+
+.header-left h2{
+color:#103703;
+font-weight:700;
+}
+
+.header-right{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.search-container{
+display:flex;
+align-items:center;
+background:#cfe9c9;
+padding:6px 12px;
+border-radius:20px;
+width:260px;
+border:1px solid #103703;
+}
+
+.search-input{
+border:none;
+background:transparent;
+outline:none;
+width:100%;
+}
+
+.icon-circle{
+width:40px;
+height:40px;
+background:#d9d9d9;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* WRAPPER */
+
+.wrapper{
+max-width:1100px;
+margin:40px auto;
+background:#f4f4f4;
+padding:30px;
+border-radius:20px;
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* GREEN MOVE-IN HEADER */
+
+.movein-header{
+display:inline-flex;
+align-items:center;
+gap:12px;
+background:#e6f4ea;
+padding:10px 20px;
+border-radius:4px;
+margin-bottom:20px;
+}
+
+.movein-icon{
+width:30px;
+height:30px;
+background:#2e7d32;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:4px;
+font-size:18px;
+}
+
+.movein-title{
+font-size:20px;
+font-weight:600;
+color:#1b5e20;
+}
+
+/* PROGRESS BAR */
+
+.progress-container{
+width:70%;
+margin:30px auto;
+}
+
+.progress-bar{
+height:14px;
+background:#0b3d02;
+border-radius:20px;
+overflow:hidden;
+}
+
+.progress-fill{
+width:66%;
+height:100%;
+background:#7CFF5B;
+}
+
+.progress-steps{
+display:flex;
+justify-content:space-between;
+margin-top:10px;
+font-size:14px;
+}
+
+.step{
+display:flex;
+align-items:center;
+gap:8px;
+color:#1b5e20;
+}
+
+.circle{
+width:18px;
+height:18px;
+border-radius:50%;
+background:#c8e6c9;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+font-weight:bold;
+}
+
+.step.active .circle,
+.step.completed .circle{
+background:#4CAF50;
+color:#fff;
+}
+
+/* ANTEL HEADER */
+
+.clearance-header{
+text-align:center;
+}
+
+.clearance-header img{
+width:70px;
+}
+
+/* FORM BORDER */
+
+.clearance-container{
+border:2px solid black;
+padding:20px;
+margin-top:20px;
+background:white;
+}
+
+.clearance-title{
+text-align:center;
+font-weight:700;
+font-size:18px;
+border-top:4px solid black;
+border-bottom:4px solid black;
+padding:6px;
+margin:15px 0;
+}
+
+/* TABLE */
+
+.table-box{
+border:1px solid black;
+}
+
+.table-row{
+display:flex;
+border-bottom:1px solid black;
+}
+
+.table-cell{
+flex:1;
+padding:8px;
+border-right:1px solid black;
+}
+
+.table-cell:last-child{
+border-right:none;
+}
+
+.table-input{
+width:100%;
+border:none;
+outline:none;
+margin-top:5px;
+background:transparent;
+}
+
+/* SECTIONS */
+
+.section{
+margin-top:15px;
+}
+
+.section label{
+display:block;
+margin:5px 0;
+}
+
+/* CHECKLIST */
+
+.check-row{
+display:flex;
+align-items:center;
+gap:8px;
+margin:6px 0;
+}
+
+.fill-line{
+flex:1;
+border:none;
+border-bottom:1px solid black;
+outline:none;
+background:transparent;
+}
+
+/* SIGNATURE */
+
+.compliance-container{
+display:flex;
+justify-content:space-between;
+margin-top:20px;
+}
+
+.compliance-left{
+width:60%;
+}
+
+.compliance-right{
+width:35%;
+}
+
+.signature-input{
+width:100%;
+border:none;
+border-bottom:1px solid black;
+margin:8px 0;
+background:transparent;
+}
+
+.signature-input{
+width:100%;
+border:none;
+border-bottom:1px solid black;
+height:25px;
+margin:8px 0;
+background:transparent;
+}
+
+/* ===== BUTTON SIZE FIX ONLY (same as previous code) ===== */
+
+.form-actions{
+display:flex;
+justify-content:flex-end;
+align-items:center;
+gap:18px;
+}
+
+.delete-btn,
+.download-btn{
+width:70px;
+height:55px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:12px;
+border:solid;
+margin-top:60px;
+cursor:pointer;
+}
+
+.delete-btn{
+border-color:red;
+}
+
+.download-btn{
+border-color:#4CAF50;
+}
+
+.delete-btn img,
+.download-btn img{
+width:26px;
+}
+
+.next-btn{
+padding:16px 70px;
+border-radius:16px;
+font-size:16px;
+font-weight:600;
+border:solid;
+border-color:white;
+background-color:#103703;
+color:white;
+margin-top:60px;
+cursor:pointer;
+}
+
+input[type="radio"]{
+transform: scale(1.8);
+margin-right:4px;
+}
+
+.line-input{
+border:none;
+border-bottom:1px solid black;
+width:150px;
+margin-left:6px;
+outline:none;
+background:transparent;
+}
+
+.signature-box{
+text-align:center;
+}
+
+.signature-input{
+width:100%;
+border:none;
+border-bottom:1px solid black;
+margin-bottom:5px;
+background:transparent;
+}
+
+.signature-name{
+font-weight:600;
+margin-top:3px;
+}
+
+.signature-sub{
+font-size:12px;
+color:#333;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="header-left">
+<img src="img/antel-logo.png" class="header-logo">
+<h2>Book Appointment</h2>
+</div>
+
+<div class="header-right">
+<div class="search-container">
+<input type="text" class="search-input" placeholder="Search">
+</div>
+<div class="icon-circle"><img src="img/Ring bell.png " width="20"></div>
+<div class="icon-circle"><img src="img/profile-logo.png" width="20"></div>
+</div>
+</div>
+
+<div class="wrapper">
+
+<!-- GREEN MOVE-IN HEADER -->
+<div class="movein-header">
+<div class="movein-icon">🏠</div>
+<div class="movein-title">Move-out  Clearance</div>
+</div>
+
+<!-- PROGRESS BAR -->
+
+<div class="progress-container">
+
+<div class="progress-bar">
+<div class="progress-fill"></div>
+</div>
+
+<div class="progress-steps">
+
+<div class="step completed">
+<div class="circle">1</div>
+Information Form
+</div>
+
+<div class="step active">
+<div class="circle">2</div>
+Move-out Clearance Form
+</div>
+
+<div class="step">
+<div class="circle">3</div>
+Book Appointment
+</div>
+
+</div>
+</div>
+
+<!-- ANTEL HEADER -->
+
+<div class="clearance-header">
+<img src="img/antel-logo.png"><br>
+<strong>ANTEL GRAND VILLAGE HOMEOWNERS ASSOCIATION, INC.</strong><br>
+Address:Neptune Street Bacao 1,General Trias, Cavite<br>
+Email:agvclubhouse@antel.com.photocopy-text <br>
+Contact No: (0917) 572-9862(046) 436-6745
+</div>
+
+<!-- FORM -->
+
+<div class="clearance-container">
+
+<div class="clearance-title">
+MOVE-OUT CLEARANCE
+</div>
+
+<!-- TABLE -->
+<div class="table-box">
+
+<!-- ROW 1 -->
+<div class="table-row">
+<div class="table-cell">
+Date Issued:
+<input type="date" class="table-input">
+</div>
+
+<div class="table-cell">
+Move-in Date:
+<input type="date" class="table-input">
+</div>
+</div>
+
+<!-- ROW 2 -->
+<div class="table-row">
+<div class="table-cell">
+Name of Member:
+<input type="text" class="table-input">
+</div>
+
+<div class="table-cell">
+Village Construction Permit No.:
+<input type="text" class="table-input">
+</div>
+</div>
+
+<!-- ROW 3 -->
+<div class="table-row">
+<div class="table-cell">
+Village/Block No./Lot No.:
+<input type="text" class="table-input">
+</div>
+
+<div class="table-cell">
+Street Name:
+<input type="text" class="table-input">
+</div>
+</div>
+
+
+<!-- ROW 4 -->
+<div class="table-row" style="border:none;">
+
+<div style="flex:1.04;"></div>
+
+<div class="table-cell" style="border:1.5px solid black; border-left:2.5px solid black;">
+ASCII / VMS Reference No.:
+<input type="text" class="table-input">
+</div>
+
+</div>
+
+<!-- TYPE OF OCCUPANCY -->
+
+<div class="section">
+<strong>Type of Occupancy:</strong>
+<label><input type="radio" name="occupancy"> Owned</label>
+<label><input type="radio" name="occupancy"> Rented</label>
+<label><input type="radio" name="occupancy"> Under Caretaker</label>
+</div>
+
+<!-- DOCUMENTS -->
+
+<div class="section">
+<label>
+<input type="radio" name="documents">
+Maintenance Dues
+<input type="text" class="line-input">
+</label>
+
+<label>
+<input type="radio" name="documents">
+Water Bill
+<input type="text" class="line-input">
+</label>
+
+<label>
+<input type="radio" name="documents">
+Per attached List of items to be pulled out
+<input type="text" class="line-input">
+</label>
+<label><input type="radio" name="documents"> Gate Pass</label>
+</div>
+
+<!-- CHECKLIST -->
+
+<div class="compliance-container">
+
+<div class="compliance-left">
+
+
+<div style="margin-top:130px;">
+<strong>NOTE:</strong>
+
+<ol style="padding-left:20px;">
+<li>Deliveries allowed <strong>Monday to Saturday(Days)</strong>.</li>
+<li>Delivery hours from <strong>8:00 AM to 6:00 PM(Time)</strong>.</li>
+<li>Moving works allowed up to <strong>5:00 PM(Time)</strong>.</li>
+<li>Approved Move-in Clearance shall be submitted to The Head security of the Property Management Group. </li>  
+<li>If The Applicant is the authorized represntative OF THE 
+  Registered Lot Ownwer, A Special Power of Attorney Duty Signed By the Lot
+  Owner and notarized is required to be submitted together with this form.</li>
+</ol>
+
+</div>
+</div>
+
+<div class="compliance-right">
+
+<div class="signature-box">
+<input type="text" class="signature-input">
+<div class="signature-name">Owner/Applicant</div>
+<div class="signature-sub">(Signature over printed name)</div>
+</div>
+
+<br><br>
+
+Approved By:
+<div class="signature-input"></div>
+Property Management Group
+
+</div>
+
+</div>
+
+</div>
+
+<!-- BUTTONS -->
+
+<div class="form-actions">
+
+<button class="delete-btn">
+<img src="img/delete-button.png">
+</button>
+
+<button class="download-btn">
+<img src="img/download-button.png">
+</button>
+
+<button class="next-btn">
+Next
+</button>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+
+<link rel="stylesheet" href="/css/signup.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-container">
+    <a href="/login">
+      <img src="/img/antel-logo.png" alt="Antel Logo">
+    </a>
+  </div>
+  <div class="signup-title">SIGN UP</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-container">
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="progress-steps">
+    <div class="step">
+      <img src="/img/one-logo.png">
+      <span>Registration</span>
+    </div>
+    <div class="step">
+      <img src="/img/two-logo.png">
+      <span>Verification</span>
+    </div>
+    <div class="step">
+      <img src="/img/three-logo.png">
+      <span>Registered</span>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ FORM -->
+<form action="/register" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+
+<div class="card">
+<div class="form-wrapper">
+
+<!-- LEFT -->
+<div class="column">
+<div class="section-title">I. Personal Information</div>
+
+<div class="input-group">
+<input type="text" name="givenName" placeholder="Given Name" required>
+</div>
+
+<div class="input-group">
+<input type="text" name="surname" placeholder="Surname" required>
+</div>
+
+<div class="input-group select-icon">
+<select name="gender">
+<option value="">Gender</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+<img src="/img/dropdown-logo.png">
+</div>
+
+<div class="input-group">
+<input type="text" name="contact" placeholder="Contact No.">
+</div>
+
+<div class="input-group">
+<input type="text" name="citizenship" placeholder="Citizenship">
+</div>
+
+<div class="input-group calendar-icon">
+<input type="date" name="birthdate" id="birthdate">
+<img src="/img/calendar-logo.png">
+</div>
+
+<div class="input-group select-icon">
+<select name="village">
+<option value="">Select Village</option>
+<option>Grand Pasadena</option>
+</select>
+<img src="/img/dropdown-logo.png">
+</div>
+
+<div class="input-group">
+<input type="text" name="blockLot" placeholder="Block and Lot">
+</div>
+
+<div class="input-group">
+<input type="text" name="referenceNumber" placeholder="Reference Number" required>
+</div>
+
+<div class="section-title" style="margin-top:20px;">II. Ownership Type</div>
+
+<div class="input-group select-icon">
+<select name="ownershipType">
+<option>Homeowner</option>
+<option>Tenant</option>
+</select>
+<img src="/img/dropdown-logo.png">
+</div>
+</div>
+
+<!-- RIGHT -->
+<div class="column">
+
+<div class="section-title">Profile Picture</div>
+<div class="upload-box" onclick="document.getElementById('fileInput').click()">
+  <img id="preview" src="/img/upload-icon.png">
+  <p>Click or drag file to upload</p>
+  <input type="file" name="profilePic" id="fileInput" accept="image/*" hidden>
+</div>
+
+<div class="section-title">III. Account Credentials</div>
+
+<div class="input-group">
+<input type="email" name="email" placeholder="Email" required>
+</div>
+
+<div class="input-group">
+<input type="password" name="password" id="password" placeholder="Password" required>
+<img src="/img/toggle-eye-button.png" class="eye-icon" onclick="togglePassword('password')">
+</div>
+
+<div class="input-group">
+<input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required>
+<img src="/img/toggle-eye-button.png" class="eye-icon" onclick="togglePassword('confirmPassword')">
+</div>
+
+<div class="password-note">
+<img src="/img/note-logo.png">
+<span>
+A strong password uses at least 12 characters with letters, numbers, and symbols.
+</span>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="agree" required>
+<label for="agree">
+I confirm that my information is correct and agree to Terms & Conditions.
+</label>
+</div>
+
+<div class="button-group">
+<button type="submit" class="btn btn-primary">CREATE ACCOUNT</button>
+<button type="button" class="btn btn-danger" onclick="clearForm()">CLEAR ALL</button>
+</div>
+
+<div class="footer-note">
+Note: Create account between 8:00AM–4:30PM for real-time verification.
+</div>
+
+</div>
+</div>
+</div>
+
+</form>
+
+<script>
+// PASSWORD TOGGLE
+function togglePassword(id){
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+// DATE PICKER ICON
+document.querySelector('.calendar-icon img').addEventListener('click', function() {
+  document.getElementById('birthdate').showPicker();
+});
+
+// VALIDATION
+function validateForm(){
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+  const agree = document.getElementById("agree").checked;
+
+  if(password.length < 12){
+    alert("Password must be at least 12 characters.");
+    return false;
+  }
+  if(password !== confirmPassword){
+    alert("Passwords do not match.");
+    return false;
+  }
+  if(!agree){
+    alert("You must agree.");
+    return false;
+  }
+
+  return true;
+}
+
+// CLEAR FORM
+function clearForm(){
+  document.querySelectorAll("input").forEach(input=>{
+    if(input.type !== "checkbox") input.value="";
+  });
+  document.querySelectorAll("select").forEach(select=>select.selectedIndex=0);
+  document.getElementById("agree").checked=false;
+}
+
+// IMAGE PREVIEW (NEW 🔥)
+const fileInput = document.getElementById('fileInput');
+const preview = document.getElementById('preview');
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if(file){
+    preview.src = URL.createObjectURL(file);
+  }
+});
+
+// DRAG DROP
+const uploadBox = document.querySelector('.upload-box');
+
+uploadBox.addEventListener('dragover', (e)=>{
+  e.preventDefault();
+});
+
+uploadBox.addEventListener('drop', (e)=>{
+  e.preventDefault();
+  fileInput.files = e.dataTransfer.files;
+  preview.src = URL.createObjectURL(e.dataTransfer.files[0]);
+});
+</script>
+
+</body>
+</html>

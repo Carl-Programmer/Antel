@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+</head>
+<body>
+    <%- include('../partials/adminTopbar', { title: 'Manage Users' }) %>
+
+<div class="container">
+  <%- include('../partials/adminSidebar', { page: 'users' }) %>
+
+  <div class="main">
+
+    <h2>User List</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>H.O Ref No.</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Village</th>
+          <th>Block & Lot</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% users.forEach(user => { %>
+          <tr>
+            <td><%= user.referenceNumber || 'N/A' %></td>
+            <td><%= user.givenName %> <%= user.surname %></td>
+            <td><%= user.email %></td>
+            <td><%= user.village %></td>
+            <td><%= user.blockLot %></td>
+            <td><%= user.role %></td>
+            
+            <td>
+              <select class="status-select" data-id="<%= user._id %>" style="padding: 4px;">
+                <option value="pending" <%= user.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                <option value="active" <%= user.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="rejected" <%= user.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+                <option value="deactivated" <%= user.status === 'deactivated' ? 'selected' : '' %>>Deactivated</option>
+              </select>
+            </td>
+
+            <td>
+               <a href="/admin/edit-user/<%= user._id %>" style="text-decoration: none; padding: 4px 8px; background: blue; color: white; border-radius: 4px;">Edit</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+
+    </table>
+
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.status-select').forEach(select => {
+    select.addEventListener('change', async (e) => {
+      const userId = e.target.getAttribute('data-id');
+      const newStatus = e.target.value;
+
+      try {
+        // Send the new status to the backend in the background
+        const response = await fetch(`/admin/update-status/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json' // Tell Express we are sending JSON
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          console.log('Status updated successfully!');
+          // Optional: You could add a visual indicator here like a temporary green checkmark
+        } else {
+          alert('❌ Failed to update status.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('❌ Error connecting to server.');
+      }
+    });
+  });
+</script>
+</body>
+</html>

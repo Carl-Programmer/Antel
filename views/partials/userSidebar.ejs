@@ -1,0 +1,115 @@
+<link rel="stylesheet" href="/css/userSidebar.css">
+
+<div class="sidebar">
+  <div class="sidebar-menu">
+
+    <a href="/user/dashboard">
+      <div class="menu-item active">
+        <img src="/img/Dashboard.png">
+        <span>Dashboard</span>
+      </div>
+    </a>
+
+    <a href="/user/bills">
+      <div class="menu-item">
+        <img src="/img/Due Bill.png">
+        <span>Monthly Bills</span>
+      </div>
+    </a>
+
+    <a href="/user/appointments">
+      <div class="menu-item">
+        <img src="/img/Book apoinment.png">
+        <span>Book Appointment</span>
+      </div>
+    </a>
+
+    <a href="/user/memberships">
+      <div class="menu-item">
+        <img src="/img/Memberships.png">
+        <span>Memberships</span>
+      </div>
+    </a>
+
+    <a href="/user/concerns">
+      <div class="menu-item">
+        <img src="/img/Personal Info.png">
+        <span>Other Concerns</span>
+      </div>
+    </a>
+
+    <a href="/user/help">
+      <div class="menu-item">
+        <img src="/img/Help.png">
+        <span>Help</span>
+      </div>
+    </a>
+
+    <a href="/user/settings">
+      <div class="menu-item">
+        <img src="/img/Settings.png">
+        <span>Settings</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- LOGOUT BUTTON -->
+  <div class="sidebar-logout" id="logoutBtn">
+    <img src="/img/logout-button.png">
+    <span>Logout</span>
+  </div>
+</div>
+
+
+<!-- LOGOUT MODAL -->
+<div class="logout-modal" id="logoutModal">
+  <div class="logout-box">
+    <h2>Would you like to Logout?</h2>
+    <img src="/img/antel-logo.png" class="logout-logo">
+    <div class="logout-buttons">
+      <button class="btn-yes" onclick="confirmLogout()">YES</button>
+      <button class="btn-no" onclick="closeLogout()">NO</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const logoutBtn = document.getElementById("logoutBtn");
+const logoutModal = document.getElementById("logoutModal");
+
+// OPEN MODAL
+logoutBtn.onclick = function(){
+  logoutModal.classList.add("active");
+}
+
+// CLOSE MODAL
+function closeLogout(){
+  logoutModal.classList.remove("active");
+}
+
+// CLICK OUTSIDE TO CLOSE (better UX)
+logoutModal.addEventListener('click', function(e){
+  if(e.target === logoutModal){
+    closeLogout();
+  }
+});
+
+// CONFIRM LOGOUT (CONNECTED TO BACKEND)
+function confirmLogout(){
+  fetch('/logout', {
+    method: 'POST'
+  })
+  .then(res => {
+    if(res.ok){
+      window.location.href = '/';
+    } else {
+      alert('Logout failed');
+    }
+  })
+  .catch(err => {
+    console.error('Logout error:', err);
+  });
+}
+</script>

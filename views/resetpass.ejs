@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reset Password</title>
+
+<link rel="stylesheet" href="/css/resetpass.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-container">
+    <img src="/img/antel-logo.png" alt="">
+  </div>
+  <div class="page-title">FORGOT PASSWORD</div>
+</div>
+
+<!-- MAIN -->
+<div class="wrapper">
+
+  <div class="inner-card">
+
+    <div class="inner-header">
+      RESET PASSWORD
+    </div>
+
+    <div class="inner-content">
+
+      <!-- NEW PASSWORD -->
+      <div class="input-group">
+        <label>Enter new password</label>
+        <input type="password" class="input-field" id="newPassword">
+        <img src="img/toggle-eye-button.png" class="eye-icon" onclick="togglePassword('newPassword')" alt="">
+      </div>
+
+      <!-- CONFIRM PASSWORD -->
+      <div class="input-group">
+        <label>Confirmed new password</label>
+        <input type="password" class="input-field" id="confirmPassword">
+        <img src="img/toggle-eye-button.png" class="eye-icon" onclick="togglePassword('confirmPassword')" alt="">
+      </div>
+
+      <!-- PASSWORD NOTE -->
+      <div class="password-note">
+        <img src="img/note-logo-white.png" alt="">
+        <span>
+          A strong password should use at least 12 characters and include uppercase and lowercase letters, numbers, and symbols (e.g., !, @, #, $, %).
+        </span>
+      </div>
+
+      <!-- BUTTONS -->
+      <div class="button-group">
+        <button class="btn btn-red" onclick="clearFields()">CLEAR ALL</button>
+        <button class="btn btn-green" onclick="confirmReset()">CONFIRM</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function togglePassword(id){
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+function clearFields(){
+  document.getElementById("newPassword").value = "";
+  document.getElementById("confirmPassword").value = "";
+}
+
+/* =========================
+   CONFIRM RESET PASSWORD
+========================= */
+function confirmReset(){
+  const urlParams = new URLSearchParams(window.location.search);
+  const email = urlParams.get("email");
+
+  const newPass = document.getElementById("newPassword").value;
+  const confirmPass = document.getElementById("confirmPassword").value;
+
+  if(!email){
+    alert("Session expired. Please try again.");
+    window.location.href = "/forgot";
+    return;
+  }
+
+  if(newPass.length < 1){
+    alert("Password must be at least 12 characters.");
+    return;
+  }
+
+  if(newPass !== confirmPass){
+    alert("Passwords do not match.");
+    return;
+  }
+
+  fetch("/reset-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password: newPass })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.success){
+      alert("Password reset successful!");
+      window.location.href = "/login";
+    } else {
+      alert("Reset failed");
+    }
+  })
+  .catch(err => {
+    alert("Server error");
+    console.error(err);
+  });
+}
+</script>
+
+</body>
+</html>

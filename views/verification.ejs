@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verification</title>
+
+<link rel="stylesheet" href="/css/verification.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-container">
+    <img src="img/antel-logo.png" alt="">
+  </div>
+  <div class="signup-title">SIGN UP</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-container">
+  <div class="progress-bar">
+    <div class="progress-fill"></div>
+  </div>
+
+  <div class="progress-steps">
+    <div class="step">
+      <img src="img/one-logo.png" alt="">
+      <span>Registration</span>
+    </div>
+
+    <div class="step">
+      <img src="img/two-logo.png" alt="">
+      <span>Verification</span>
+    </div>
+
+    <div class="step">
+      <img src="img/three-logo.png" alt="">
+      <span>Registered</span>
+    </div>
+  </div>
+</div>
+
+<!-- VERIFICATION CONTENT -->
+<div class="card">
+
+  <!-- 🔥 LOADING IMAGE (PUT YOUR IMAGE HERE) -->
+  <div class="loader-container">
+    <img src="img/loading-logo.png" alt="Loading">
+  </div>
+
+  <div class="waiting-title">
+    Waiting for admin to verify your account...
+  </div>
+
+  <div class="message-box">
+    <textarea placeholder="Send us a message if no response in 5 minutes."></textarea>
+  </div>
+
+  <button class="submit-btn" onclick="sendMessage()">SUBMIT</button>
+
+  <div class="footer-note">
+    Note: It is advisable to create an account from 8:00AM to 4:30PM to get verified real time.
+  </div>
+
+</div>
+
+<script>
+function sendMessage(){
+  alert("Message sent to admin!");
+}
+
+// 🔥 AUTO CHECK STATUS EVERY 3 SECONDS
+setInterval(async () => {
+  try {
+    const res = await fetch('/check-status');
+    const data = await res.json();
+
+    console.log("STATUS:", data.status);
+
+    if (data.status === 'active') {
+      // ✅ redirect when approved
+      window.location.href = "/registered";
+    }
+
+  } catch (err) {
+    console.error("Error checking status:", err);
+  }
+}, 3000); // every 3 seconds
+</script>
+
+
+</body>
+</html>

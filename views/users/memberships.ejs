@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/membership.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ✅ TOPBAR -->
+<%- include('../partials/userTopbar') %>
+
+<div class="container">
+
+  <!-- ✅ SIDEBAR (includes logout globally) -->
+  <%- include('../partials/userSidebar') %>
+
+  <!-- ✅ MAIN -->
+  <div class="main">
+    <div class="membership-wrapper">
+
+      <div class="membership-grid">
+
+        <a href="/user/gym" style="text-decoration:none; color:inherit;">
+          <div class="membership-card">
+            <img src="/img/Expired date.png">
+            <h3>Fitness Station</h3>
+          </div>
+        </a>
+
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

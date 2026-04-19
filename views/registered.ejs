@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registered</title>
+
+<link rel="stylesheet" href="/css/registered.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-container">
+    <img src="img/antel-logo.png" alt="">
+  </div>
+  <div class="signup-title">SIGN UP</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-container">
+  <div class="progress-bar">
+    <div class="progress-fill"></div>
+  </div>
+
+  <div class="progress-steps">
+    <div class="step">
+      <img src="img/one-logo.png" alt="">
+      <span>Registration</span>
+    </div>
+
+    <div class="step">
+      <img src="img/two-logo.png" alt="">
+      <span>Verification</span>
+    </div>
+
+    <div class="step">
+      <img src="img/three-logo.png" alt="">
+      <span>Registered</span>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS CONTENT -->
+<div class="card">
+
+  <div class="success-title">
+    Congratulations!
+  </div>
+
+  <div class="success-sub">
+    You can now open your account.
+  </div>
+
+  <div class="redirect-text">
+    Redirecting you in <span id="countdown">5</span> seconds...
+  </div>
+
+  <button class="login-btn" onclick="goToLogin()">
+    GO TO LOGIN PAGE
+  </button>
+
+</div>
+
+<script>
+let seconds = 5;
+const countdownEl = document.getElementById("countdown");
+
+const timer = setInterval(() => {
+  seconds--;
+  countdownEl.textContent = seconds;
+
+  if(seconds <= 0){
+    clearInterval(timer);
+    window.location.href = "login"; // change if needed
+  }
+}, 1000);
+
+function goToLogin(){
+  window.location.href = "login"; // change if needed
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/userTopbar.css">
+<link rel="stylesheet" href="/css/userSidebar.css">
+<link rel="stylesheet" href="/css/gym.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ✅ FIXED BUTTON STYLE (anchor acting like button) */
+.plan-btn{
+  display: inline-block;
+  text-align: center;
+  background: #103703;
+  color: white;
+  padding: 8px 25px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.plan-btn:hover{
+  background: #1f5c1f;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- ✅ TOPBAR -->
+<%- include('../partials/userTopbar', { title: title }) %>
+
+<div class="container">
+
+  <!-- ✅ SIDEBAR -->
+  <%- include('../partials/userSidebar', { page: 'memberships' }) %>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="membership-card">
+
+      <div class="membership-banner">
+        <img src="/img/Expired date.png" style="width:50px;">
+        Fitness Station
+      </div>
+
+      <div class="top-section">
+
+        <div class="gym-image">
+          <img src="/img/gym.png" alt="Gym">
+        </div>
+
+        <div class="equipment">
+          <h4>TRAINING EQUIPMENT</h4>
+          <ul>
+            <li>Treadmills</li>
+            <li>Recumbent Exercise Bike</li>
+            <li>Elliptical Trainer</li>
+            <li>Multi-Station Cable Machine</li>
+            <li>Adjustable Weight Bench</li>
+            <li>Flat Bench</li>
+            <li>Dumbbells up to 75kg</li>
+            <li>Barbell</li>
+            <li>Rubber Floor Mats</li>
+          </ul>
+
+          <h4>VENTILATION & INTERIOR</h4>
+          <ul>
+            <li>Air Conditioner</li>
+            <li>Stand Fan</li>
+            <li>Exhaust Fan</li>
+            <li>Wall Mirrors</li>
+            <li>Ceiling Lights</li>
+            <li>Visual Aids</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="plans">
+
+        <div class="plan-card">
+          <div class="plan-header">MONTHLY</div>
+          <div class="plan-body">
+            <div class="price">₱ 1,500.00</div>
+            <a href="/user/gym-form1?plan=Monthly" class="plan-btn">Avail</a>
+          </div>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-header">QUARTERLY</div>
+          <div class="plan-body">
+            <div class="price">₱ 4,000.00</div>
+            <a href="/user/gym-form1?plan=Quarterly" class="plan-btn">Avail</a>
+          </div>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-header">SEMI-ANNUALLY</div>
+          <div class="plan-body">
+            <div class="price">₱ 6,000.00</div>
+            <a href="/user/gym-form1?plan=Semi-Annually" class="plan-btn">Avail</a>
+          </div>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-header">ANNUALLY</div>
+          <div class="plan-body">
+            <div class="price">₱ 10,000.00</div>
+            <a href="/user/gym-form1?plan=Annually" class="plan-btn">Avail</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

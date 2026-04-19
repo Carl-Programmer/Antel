@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/help.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ✅ TOPBAR -->
+<%- include('../partials/userTopbar') %>
+
+<div class="container">
+
+  <!-- ✅ SIDEBAR (logout is already inside) -->
+  <%- include('../partials/userSidebar') %>
+
+  <!-- ✅ MAIN -->
+  <div class="main">
+    <div class="help-container">
+
+      <!-- USER GUIDE -->
+      <div class="help-section">
+        <h3>User Guide</h3>
+
+        <div class="guide-btn">
+          <img src="/img/user-guide.png">
+          <span>View User Guide / Tutorials</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

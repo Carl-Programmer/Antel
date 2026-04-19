@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/topbar.css">
+<link rel="stylesheet" href="/css/sidebar.css">
+<link rel="stylesheet" href="/css/profile.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<%- include('../partials/userTopbar') %>
+
+<div class="container">
+
+  <%- include('../partials/userSidebar') %>
+
+  <div class="main">
+    <div class="profile-container">
+      
+<form action="/user/profile" method="POST" enctype="multipart/form-data" class="profile-layout">
+
+        <div class="profile-left">
+          <h3>My Profile</h3>
+
+          <div class="profile-image">
+            <img src="<%= user.profilePic ? user.profilePic : '/img/profile-logo.png' %>" id="profilePreview">
+
+            <div class="edit-icon" id="editProfileBtn" onclick="enableEditMode()" style="cursor: pointer;">
+              <img src="/img/edit-button.png">
+            </div>
+
+            <button type="button" id="changeImageBtn" class="change-image-btn" style="display: none; margin-top: 10px; padding: 5px 10px; cursor: pointer; background: #eee; border: 1px solid #ccc; border-radius: 4px;" onclick="document.getElementById('profileUpload').click()">
+              Change Image
+            </button>
+
+            <input type="file" id="profileUpload" name="profilePic" accept="image/*" style="display:none">
+          </div>
+
+          <div class="badge"><%= user.givenName %> <%= user.surname %></div>
+
+          <div class="profile-note">
+            Note: To change Village/Block/Lot/Ref No., contact admin or book an appointment.
+          </div>
+        </div>
+
+        <div class="profile-right">
+
+          <div class="input-group">
+            <input type="text" name="givenName" class="editable-field" value="<%= user.givenName %>" placeholder="Given Name" required readonly>
+          </div>
+          
+          <div class="input-group">
+            <input type="text" name="surname" class="editable-field" value="<%= user.surname %>" placeholder="Surname" required readonly>
+          </div>
+
+          <div class="input-group">
+            <select name="gender" class="editable-field" required disabled>
+              <option value="" disabled>Gender</option>
+              <option value="Male" <%= user.gender === 'Male' ? 'selected' : '' %>>Male</option>
+              <option value="Female" <%= user.gender === 'Female' ? 'selected' : '' %>>Female</option>
+            </select>
+            <img src="/img/dropdown-logo.png" class="icon">
+          </div>
+
+          <div class="input-group">
+            <input type="text" name="contact" class="editable-field" value="<%= user.contact %>" placeholder="Contact No." required readonly>
+          </div>
+          
+          <div class="input-group">
+            <input type="text" name="citizenship" class="editable-field" value="<%= user.citizenship %>" placeholder="Citizenship" readonly>
+          </div>
+
+          <div class="input-group">
+            <input type="date" id="birthdateInput" name="birthdate" class="editable-field" value="<%= user.birthdate ? user.birthdate.toISOString().split('T')[0] : '' %>" required readonly>
+            <img src="/img/calendar-logo.png" class="icon" style="cursor: pointer;" onclick="openCalendar()">
+          </div>
+
+          <div class="input-group">
+            <input type="text" value="<%= user.village %>" readonly style="background-color: #f0f0f0; cursor: not-allowed; opacity: 0.7;" title="Contact Admin to change">
+          </div>
+
+          <div class="row-2">
+            <div class="input-group">
+              <input type="text" value="<%= user.blockLot %>" readonly style="background-color: #f0f0f0; cursor: not-allowed; opacity: 0.7;">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <input type="text" value="<%= user.referenceNumber %>" readonly style="background-color: #f0f0f0; cursor: not-allowed; opacity: 0.7;">
+          </div>
+
+          <div class="action-buttons" id="actionButtons" style="display: none;">
+            <button type="button" class="cancel-btn" onclick="window.location.reload();">CANCEL</button>
+            <button type="submit" class="save-btn">SAVE</button>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// 🔓 FUNCTION TO ENABLE EDIT MODE
+function enableEditMode() {
+  // 1. Hide the edit pencil icon
+  document.getElementById('editProfileBtn').style.display = 'none';
+  
+  // 2. Show the "Change Image" and "Save/Cancel" buttons
+  document.getElementById('changeImageBtn').style.display = 'block';
+  document.getElementById('actionButtons').style.display = 'flex'; // or 'block' depending on your CSS
+  
+  // 3. Unlock all fields that have the "editable-field" class
+  const fields = document.querySelectorAll('.editable-field');
+  fields.forEach(field => {
+    field.removeAttribute('readonly'); // Unlocks text inputs
+    field.removeAttribute('disabled'); // Unlocks select dropdowns
+    
+    // Optional: Add a visual cue that they can now type here
+    field.style.backgroundColor = '#ffffff';
+    field.style.border = '1px solid #0056b3'; // Highlight border to show it's active
+  });
+}
+
+const uploadInput = document.getElementById("profileUpload");
+const preview = document.getElementById("profilePreview");
+
+uploadInput.addEventListener("change", function(){
+  const file = this.files[0];
+
+  if(file){
+    if(!file.type.startsWith("image/")){
+      alert("Please upload image files only.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+      preview.src = e.target.result;
+    }
+    reader.readAsDataURL(file);
+  }
+});
+
+// 📅 FUNCTION TO OPEN CALENDAR FROM CUSTOM ICON
+function openCalendar() {
+  const dateInput = document.getElementById('birthdateInput');
+  
+  // Browsers will crash if we try to force open a calendar that is 'readonly', 
+  // so we only open it if the user has clicked the "Edit" pencil first!
+  if (!dateInput.readOnly) {
+    dateInput.showPicker(); 
+  }
+}
+</script>
+
+</body>
+</html>

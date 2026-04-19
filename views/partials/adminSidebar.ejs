@@ -1,0 +1,60 @@
+<div class="sidebar">
+  <div class="sidebar-menu">
+
+    <a href="/admin/dashboard">
+      <div class="menu-item <%= page === 'dashboard' ? 'active' : '' %>">
+        <img src="/img/Dashboard.png">
+        <span>Dashboard</span>
+      </div>
+    </a>
+
+    <a href="/admin/users">
+      <div class="menu-item <%= page === 'users' ? 'active' : '' %>">
+        <img src="/img/Due Bill.png">
+        <span>Manage Users</span>
+      </div>
+    </a>
+
+    <a href="/admin/bills">
+      <div class="menu-item <%= page === 'bills' ? 'active' : '' %>">
+        <img src="/img/Book apoinment.png">
+        <span>Manage Monthly Bills</span>
+      </div>
+    </a>
+
+    <a href="/admin/appointments">
+      <div class="menu-item <%= page === 'appointments' ? 'active' : '' %>">
+        <img src="/img/Memberships.png">
+        <span>Manage Appointment</span>
+      </div>
+    </a>
+
+    <a href="/admin/memberships">
+      <div class="menu-item <%= page === 'memberships' ? 'active' : '' %>">
+        <img src="/img/Personal Info.png">
+        <span>Manage Memberships</span>
+      </div>
+    </a>
+
+    <a href="/admin/concerns">
+      <div class="menu-item <%= page === 'concerns' ? 'active' : '' %>">
+        <img src="/img/Help.png">
+        <span>Other Concerns</span>
+      </div>
+    </a>
+
+    <a href="/admin/feedbacks">
+      <div class="menu-item <%= page === 'feedbacks' ? 'active' : '' %>">
+        <img src="/img/Settings.png">
+        <span>Feedbacks</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- LOGOUT -->
+  <div class="sidebar-logout" id="logoutBtn">
+    <img src="/img/logout-button.png">
+    <span>Logout</span>
+  </div>
+</div>

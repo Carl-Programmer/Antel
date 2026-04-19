@@ -1,0 +1,78 @@
+<%- include('../partials/adminTopbar', { title: title }) %>
+<div class="container">
+  <%- include('../partials/adminSidebar', { page: 'memberships' }) %>
+
+  <div class="main">
+
+    <h2>Membership Details</h2>
+
+    <h3>Personal Info</h3>
+    <p>Name: <%= membership.givenName %> <%= membership.surname %></p>
+    <p>Plan: <%= membership.planType %></p>
+    <p>Status: <%= membership.status %></p>
+
+    <h3>Documents</h3>
+
+    <% if (membership.membershipCardDoc) { %>
+      <a href="<%= membership.membershipCardDoc %>" target="_blank">Membership Card</a><br>
+    <% } %>
+
+    <% if (membership.proofOfOwnershipDoc) { %>
+      <a href="<%= membership.proofOfOwnershipDoc %>" target="_blank">Proof of Ownership</a><br>
+    <% } %>
+
+    <% if (membership.validIdDoc) { %>
+      <a href="<%= membership.validIdDoc %>" target="_blank">Valid ID</a><br>
+    <% } %>
+
+    <% if (membership.contractOfLeaseDoc) { %>
+      <a href="<%= membership.contractOfLeaseDoc %>" target="_blank">Lease Contract</a><br>
+    <% } %>
+
+    <h3>Payment</h3>
+    <% if (membership.receipt) { %>
+      <a href="<%= membership.receipt %>" target="_blank">View Receipt</a>
+    <% } %>
+
+    <br><br>
+
+    <!-- ACTIONS -->
+<% if (membership.status === 'pending') { %>
+
+  <form action="/admin/memberships/gym/<%= membership._id %>/approve" 
+        method="POST" 
+        style="display:inline;"
+        onsubmit="return confirmApprove()">
+    <button style="background:green;color:white;">Approve</button>
+  </form>
+
+  <form action="/admin/memberships/gym/<%= membership._id %>/reject" 
+        method="POST" 
+        style="display:inline;"
+        onsubmit="return confirmReject()">
+    <button style="background:red;color:white;">Reject</button>
+  </form>
+
+<% } else { %>
+
+  <p style="margin-top:15px; font-weight:600; color:#555;">
+    Status already: <span style="color:
+      <%= membership.status === 'approved' ? 'green' : 'red' %>">
+      <%= membership.status.toUpperCase() %>
+    </span>
+  </p>
+
+<% } %>
+
+  </div>
+</div>
+
+<script>
+function confirmApprove(){
+  return confirm("Are you sure you want to APPROVE this membership?");
+}
+
+function confirmReject(){
+  return confirm("Are you sure you want to REJECT this membership?");
+}
+</script>

@@ -1,0 +1,30 @@
+<%- include('../partials/adminTopbar', { title: title }) %>
+<div class="container">
+  <%- include('../partials/adminSidebar', { page: 'memberships' }) %>
+
+  <div class="main">
+    <h2>Fitness Station Members</h2>
+
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Plan</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+
+      <% memberships.forEach(m => { %>
+        <tr>
+          <td><%= m.givenName %> <%= m.surname %></td>
+          <td><%= m.planType %></td>
+          <td><%= m.status %></td>
+          <td>
+            <a href="/admin/memberships/gym/<%= m._id %>">
+              <button>View</button>
+            </a>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+  </div>
+</div>
