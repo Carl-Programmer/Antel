@@ -22,6 +22,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/uploads', express.static('public/uploads'));
+app.use('/uploads', express.static('uploads'));
 
 const session = require('express-session');
 

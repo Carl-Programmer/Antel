@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Water Bills</title>
+
+<link rel="stylesheet" href="/css/water-bill.css">
+</head>
+
+<body>
+
+<%- include('../partials/userTopbar', { title: 'Monthly Bills' }) %>
+
+<div class="container">
+
+  <%- include('../partials/userSidebar') %>
+
+  <div class="main">
+
+    <div class="water-container">
+
+      <!-- HEADER -->
+      <div class="water-header">
+
+        <div class="water-title">
+          <img src="/img/Water Bill.png" style="width:35px;">
+          <h3>Water Bills</h3>
+        </div>
+
+        <div class="balance-box">
+          <p>Current Balance:</p>
+
+<h2 id="balanceAmount">
+  ₱ <%= typeof balance !== 'undefined'
+      ? balance.toFixed(2)
+      : '0.00' %>
+</h2>
+
+          <button class="pay-btn">
+            Pay
+          </button>
+        </div>
+
+      </div>
+
+      <!-- HISTORY HEADER -->
+      <div class="history-header">
+        <img src="/img/history-logo.png">
+        <h4>Payment History</h4>
+      </div>
+
+      <!-- BILL LOOP -->
+      <% if (bills.length === 0) { %>
+
+        <p>No water bills yet.</p>
+
+      <% } %>
+
+      <% bills.forEach(bill => { %>
+
+      <div class="history-item">
+
+        <div class="history-left">
+
+          <img src="/img/payment-history-logo.png"
+               class="history-logo">
+
+          <strong>
+            <%= new Date(bill.dueDate).toLocaleString(
+              'en-US',
+              {
+                month: 'long',
+                year: 'numeric'
+              }
+            ) %> Bill
+          </strong>
+
+        </div>
+
+        <div class="history-right">
+
+          <div class="amount">
+            ₱ <%= bill.amount.toFixed(2) %>
+          </div>
+
+          <div class="bottom-actions">
+
+            <!-- VIEW PDF -->
+            <a href="/uploads/waterBills/<%= bill.file %>"
+               target="_blank">
+
+              <button class="receipt-btn">
+                View Bill
+              </button>
+
+            </a>
+
+            <img src="/img/right-arrow-button.png"
+                 class="arrow-icon">
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <% }) %>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

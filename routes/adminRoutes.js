@@ -72,7 +72,25 @@ router.get('/feedbacks', (req, res) => {
     page: 'feedbacks'
   });
 });
+// WATER
+router.get('/bills/water/manageWater', (req, res) => {
+  res.render('admin/bills/water/manageWater', {
+    title: 'Manage Water Bills'
+  });
+});
 
+// MAINTENANCE
+router.get('/bills/maintenance/uploadMaintenance', (req, res) => {
+  res.render('admin/bills/maintenance/uploadMaintenance', {
+    title: 'Upload Maintenance Bill'
+  });
+});
+
+router.get('/bills/maintenance/manageMaintenance', (req, res) => {
+  res.render('admin/bills/maintenance/manageMaintenance', {
+    title: 'Manage Maintenance Bills'
+  });
+});
 //===========================================
 // User Approval Actions
 //===========================================
@@ -122,6 +140,75 @@ function isAdmin(req, res, next) {
   }
   next();
 }
+
+// =======================================================
+// 💧 MANAGE WATER BILLS
+// =======================================================
+router.get('/bills/water/uploadWater', async (req, res) => {
+  const users = await User.find();
+
+  res.render('admin/bills/water/uploadWater', {
+    title: 'Upload Water Bill',
+    users
+  });
+});
+
+const uploadPath = 'uploads/waterBills';
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadPath); // ✅ updated path
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage });
+
+// OPEN PAGE
+router.get('/bills/water/uploadForm/:userId', async (req, res) => {
+  const user = await User.findById(req.params.userId);
+
+  if (!user) {
+    return res.send('User not found');
+  }
+
+  res.render('admin/bills/water/uploadWaterForm', {
+    title: 'Upload Water Bill',
+    user
+  });
+});
+// HANDLE UPLOAD
+const WaterBill = require('../models/WaterBill');
+
+router.post('/bills/water/upload', upload.single('bill'), async (req, res) => {
+  try {
+    const { userId, dueDate, amount } = req.body;
+
+    if (!req.file) {
+      return res.send('No file uploaded');
+    }
+
+    const newBill = new WaterBill({
+      user: userId,
+      file: req.file.filename,
+      dueDate,
+      amount
+    });
+
+    await newBill.save();
+
+    res.redirect('/admin/bills/water/uploadWater');
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Upload failed');
+  }
+});
 
 // =======================================================
 // 📊 MANAGE MEMBERSHIPS (landing)

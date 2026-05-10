@@ -1,6 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<style>
+/* ===== LAYOUT ===== */
+
+.container {
+  display: flex;
+}
+
+.main {
+  flex: 1;
+  padding: 30px;
+}
+
+/* ===== BILLS CONTAINER ===== */
+
+.bills-container {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  justify-content: center;
+}
+
+/* ===== CARD ===== */
+
+.bill-card {
+  width: 260px;
+  height: 220px;
+  background: #cfe6c9;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ===== ICON ===== */
+
+.icon {
+  font-size: 45px;
+  margin-bottom: 10px;
+}
+
+/* ===== TITLE ===== */
+
+.bill-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #2e4d2c;
+}
+
+/* ===== BUTTONS (ALWAYS VISIBLE NOW) ===== */
+
+.bill-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bill-btn {
+  width: 160px;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #e6e6e6;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* optional: subtle button hover only */
+.bill-btn:hover {
+  background: #ffffff;
+}
+</style>
+</head>
+
+<body>
+
 <%- include('../partials/adminTopbar', { title: title }) %>
+
 <div class="container">
+
   <%- include('../partials/adminSidebar', { page: 'memberships' }) %>
 
   <div class="main">
 
+    <div class="bills-container">
+
+      <!-- WATER BILL -->
+      <div class="bill-card">
+        <div class="icon">💧</div>
+        <div class="bill-title">Water Bill</div>
+
+        <div class="bill-actions">
+          <a href="/admin/bills/water/uploadWater">
+            <button class="bill-btn">Upload Bills</button>
+          </a>
+
+          <a href="/admin/bills/water/manageWater">
+            <button class="bill-btn">Manage Accounts</button>
+          </a>
+        </div>
+      </div>
+
+      <!-- MAINTENANCE BILL -->
+      <div class="bill-card">
+        <div class="icon">🧾</div>
+        <div class="bill-title">Maintenance Bill</div>
+
+        <div class="bill-actions">
+          <a href="/admin/bills/maintenance/uploadMaintenance">
+            <button class="bill-btn">Upload Bills</button>
+          </a>
+
+          <a href="/admin/bills/maintenance/manageMaintenance">
+            <button class="bill-btn">Manage Accounts</button>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: #e5e5e5;
+}
+
+/* HEADER */
+
+.header {
+  height: 90px;
+  background: #e9e9e9;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-logo {
+  width: 115px;
+}
+
+.header-left h2 {
+  color: #103703;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+/* LAYOUT */
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  width: 240px;
+  background: #eeeeee;
+  height: calc(100vh - 90px);
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #dcdcdc;
+}
+
+.sidebar-menu {
+  flex: 1;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 18px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.menu-item img {
+  width: 28px;
+}
+
+.menu-item span {
+  font-weight: 500;
+  color: #2f2f2f;
+}
+
+.menu-item:hover {
+  background: #d7f0d4;
+}
+
+.menu-item.active {
+  background: #cfe9c9;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 18px;
+  border-top: 1px solid #dcdcdc;
+  cursor: pointer;
+}
+
+.sidebar-logout img {
+  width: 26px;
+}
+
+/* MAIN */
+
+.main {
+  flex: 1;
+  padding: 30px;
+  width: 100%;
+}
+
+.dashboard-wrapper {
+  background: #f4f4f4;
+  border-radius: 22px;
+  padding: 35px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  width: 100%;
+}
+
+/* TOP AREA */
+
+.top-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+/* SEARCH */
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 25px;
+  padding: 8px 15px;
+  width: 250px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.search-box img {
+  width: 18px;
+  margin-right: 10px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+/* RIGHT CONTROLS */
+
+.right-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* FILTERS */
+
+.filters {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.filter-group select {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: none;
+  background: #e6e6e6;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* BUTTONS */
+
+.upload-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.upload-multiple {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #103703;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.upload-multiple img {
+  width: 18px;
+}
+
+/* UPLOAD FILE BUTTON */
+
+.upload-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #103703;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.upload-file img {
+  width: 16px;
+}
+
+/* FOLDER BUTTON */
+
+.folder-btn {
+  border: 2px solid gold;
+  background: white;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.folder-btn img {
+  width: 20px;
+}
+
+/* TABLE */
+
+.water-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.water-table thead {
+  background: #6ce04a;
+}
+
+.water-table th {
+  padding: 14px;
+  text-align: left;
+}
+
+.water-table td {
+  padding: 14px;
+  border-top: 1px solid #eee;
+}
+
+.water-table th:last-child,
+.water-table td:last-child {
+  text-align: center;
+  width: 220px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.water-table tbody tr:nth-child(even) {
+  background: #eef7ec;
+}

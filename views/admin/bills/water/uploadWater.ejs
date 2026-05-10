@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/css/admin/uploadWater.css">
+</head>
+
+
+<body>
+
+<!-- TOPBAR -->
+<%- include('../../../partials/adminTopbar', { title: title }) %>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <%- include('../../../partials/adminSidebar', { page: 'memberships' }) %>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- HEADER -->
+    <div class="content-header">
+      <h2>Members List</h2>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+
+      <div class="search-box">
+        <input type="text" placeholder="Search...">
+      </div>
+
+      <div class="filters">
+        <select>
+          <option>All Village</option>
+          <option>Grand Pasadena</option>
+        </select>
+
+        <select>
+          <option>Status</option>
+          <option>Active</option>
+          <option>Pending</option>
+          <option>Deactivated</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-container">
+      <table>
+
+        <thead>
+          <tr>
+            <th>H.O Ref No.</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Village</th>
+            <th>Block</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+<tbody>
+
+  <% if (!users || users.length === 0) { %>
+    <tr>
+      <td colspan="7" style="text-align:center;">No users found</td>
+    </tr>
+  <% } %>
+
+  <% users.forEach(user => { %>
+    <tr>
+
+      <td><input type="checkbox"></td>
+
+      <td><%= user.referenceNumber || '-' %></td>
+
+      <td>
+        <%= user.givenName %> <%= user.surname %>
+      </td>
+
+      <td><%= user.email %></td>
+
+      <td><%= user.village || '-' %></td>
+
+      <td><%= user.blockLot || '-' %></td>
+
+      <td class="actions">
+
+        <!-- ✅ Upload button (THIS is what you want) -->
+<a href="/admin/bills/water/uploadForm/<%= user._id %>" class="bill-btn">
+  Upload Bills
+</a>
+
+        <!-- Folder / View button -->
+        <a href="/admin/bills/water/view/<%= user._id %>" class="folder-btn">
+          <img src="/img/archive.png">
+        </a>
+
+      </td>
+
+    </tr>
+  <% }) %>
+
+</tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function editUser(id){
+  alert("Edit user: " + id);
+}
+</script>
+
+</body>
+</html>

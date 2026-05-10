@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 const User = require('../models/user');
 const Membership = require('../models/Membership');
+const WaterBill = require('../models/WaterBill');
 
 // =======================================================
 // 🔐 AUTH MIDDLEWARE
@@ -53,6 +54,44 @@ router.get('/settings', (req, res) => {
 //chaneg password route
 router.get('/change-password', (req, res) => {
   res.render('users/changePassword', { title: 'Change Password' });
+});
+
+//===============================================
+// Water Bill View
+//===============================================
+
+router.get('/water-bill', async (req, res) => {
+  try {
+
+    // logged in user
+    const userId = req.session.user._id;
+
+    // get bills for this user
+    const bills = await WaterBill.find({
+      user: userId
+    }).sort({ uploadedAt: -1 });
+
+    // compute total balance
+    let balance = 0;
+
+    bills.forEach(bill => {
+      balance += Number(bill.amount || 0);
+    });
+
+    console.log("USER ID:", userId);
+    console.log("BILLS:", bills);
+    console.log("BALANCE:", balance);
+
+    res.render('users/water-bill', {
+      title: 'Water Bills',
+      bills,
+      balance
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
 });
 
 //========================================
