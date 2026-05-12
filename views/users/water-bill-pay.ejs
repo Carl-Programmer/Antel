@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Bill Payment</title>
+
+  <link rel="stylesheet" href="/css/water-bill-pay.css">
+</head>
+<body>
+    <%- include('../partials/userTopbar', { title: 'Water Bill Payment' }) %>
+
+  <div class="container">
+
+    <%- include('../partials/userSidebar') %>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="details-container">
+
+        <div class="details-title">
+          <img src="/img/Water Bill.png" style="width:22px;">
+          Water Bill Details
+        </div>
+
+        <!-- DYNAMIC BILL DETAILS -->
+        <div class="bill-card">
+          <div class="bill-left">
+
+            <div class="info-row">
+              <span>REFERENCE NO.</span>
+              <strong><%= user.referenceNumber %></strong>
+            </div>
+
+            <div class="info-row">
+              <span>DUE DATE</span>
+              <strong>
+                <%= new Date(bill.dueDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                }) %>
+              </strong>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="amount-row">
+              <span>AMOUNT TO BE PAY</span>
+              <div class="amount-value">
+                ₱ <%= bill.amount.toFixed(2) %>
+              </div>
+            </div>
+
+          </div>
+
+<div class="bill-preview">
+  <a href="/uploads/waterBills/<%= bill.file %>" target="_blank">
+    <iframe
+      src="/uploads/waterBills/<%= bill.file %>#toolbar=0&navpanes=0&scrollbar=0"
+      width="250"
+      height="250"
+      style="
+        border: none;
+        border-radius: 12px;
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        pointer-events: none;
+        display: block;
+      ">
+    </iframe>
+  </a>
+</div>
+        </div>
+
+        <div class="payment-title">
+          <img src="/img/bank-payment-logo.png" style="width:20px;">
+          Online Bank Payment
+        </div>
+
+        <div class="payment-details">
+          <p><strong>Bank Name:</strong> ASIA UNITED BANK (AUB)</p>
+          <p><strong>Account Name:</strong> ANTEL GRAND VILLAGE HOMEOWNERS ASSOCIATION INC. (AGVHOAI)</p>
+          <p><strong>Account Number:</strong> 110-01-000110-8</p>
+        </div>
+
+        <div class="upload-section">
+          <button class="upload-btn" type="button" onclick="openModal()">
+            <img src="/img/upload-receipt-button.png">
+            Upload Receipt
+          </button>
+        </div>
+
+        <div class="payment-message">
+          Alternatively, you may settle your balance via AUB kiosk or the Hello Money app by selecting AGVHOAI.
+          Please use the reference number located at the upper left of your statement for faster tracking,
+          no account number is required for this method.
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- UPLOAD MODAL -->
+  <div class="overlay" id="uploadModal" style="display:none;">
+    <div class="modal">
+
+      <form
+        action="/user/water-bill-pay/upload"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <!-- Pass current bill ID -->
+        <input type="hidden" name="billId" value="<%= bill._id %>">
+
+        <!-- Hidden File Input -->
+        <input
+          type="file"
+          id="fileInput"
+          name="receipt"
+          accept=".jpg,.jpeg,.png,.pdf"
+          hidden
+          required
+        >
+
+        <div class="upload-area" id="uploadArea">
+          <img src="/img/upload-button-green.png" id="uploadIcon">
+          <span
+            id="fileName"
+            style="display:block;margin-top:10px;color:#103703;font-weight:500;"
+          ></span>
+        </div>
+
+        <div class="modal-note">
+          Note: Click or drag the files (jpg/png/pdf) to upload the receipt.
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="delete-btn" id="deleteBtn">
+            <img src="/img/delete-button.png">
+          </button>
+
+          <button type="submit" class="submit-btn">
+            Submit
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL (optional for future use) -->
+  <div class="overlay" id="successModal" style="display:none;">
+    <div class="success-box">
+
+      <div class="success-image" style="margin-bottom:20px;">
+        <img src="/img/check-logo.png" style="width:100px;">
+      </div>
+
+      <div class="success-title">
+        Payment Done!
+      </div>
+
+      <div class="success-note">
+        Note: Please wait for the admin to confirm your payment before it appears on your Monthly Bills dashboard.
+      </div>
+
+      <div class="redirect-text">
+        Redirecting you in Monthly Water Bill Dashboard in
+        <span id="countdown">5</span> seconds...
+      </div>
+
+      <button class="ok-btn" onclick="closeSuccess()">OK</button>
+
+    </div>
+  </div>
+
+  <script>
+    const uploadModal = document.getElementById('uploadModal');
+    const successModal = document.getElementById('successModal');
+
+    const fileInput = document.getElementById('fileInput');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileName = document.getElementById('fileName');
+    const deleteBtn = document.getElementById('deleteBtn');
+
+    // Open upload modal
+    function openModal() {
+      uploadModal.style.display = 'flex';
+    }
+
+    // Close success modal
+    function closeSuccess() {
+      successModal.style.display = 'none';
+      window.location.href = '/user/water-bill';
+    }
+
+    // Click upload area to choose file
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // Show selected file name
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+      }
+    });
+
+    // Remove selected file
+    deleteBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      fileName.textContent = '';
+    });
+
+    // Close modal when clicking outside
+    uploadModal.addEventListener('click', (e) => {
+      if (e.target === uploadModal) {
+        uploadModal.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

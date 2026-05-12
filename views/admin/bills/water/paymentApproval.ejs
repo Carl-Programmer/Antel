@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/manageBill.css">
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <%- include('../../../partials/adminTopbar', { title: title }) %>
+
+  <div class="container">
+
+    <!-- SIDEBAR -->
+    <%- include('../../../partials/adminSidebar', { page: 'memberships' }) %>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <div class="wrapper">
+
+        <!-- TOP BAR -->
+        <div class="top-bar">
+          <div class="search">
+            <input type="text" id="searchInput" placeholder="Search">
+            <button>🔍</button>
+          </div>
+
+          <div class="filters">
+            <select>
+              <option>Village: All</option>
+            </select>
+
+            <select>
+              <option>Block: All</option>
+            </select>
+
+            <select>
+              <option>Archives: All</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- DATE / TIME -->
+        <div class="date-time">
+          <input type="date" id="dateInput">
+          <input type="time" id="timeInput">
+        </div>
+
+        <!-- STATUS CARDS -->
+        <div class="status-row">
+          <div class="status approval active">
+            <span><%= payments.length %></span> For Payment Approval
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>Due Date</th>
+                <th>Amount</th>
+                <th>H.O Ref No.</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Village</th>
+                <th>Block</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="tableBody">
+
+              <% if (!payments || payments.length === 0) { %>
+                <tr>
+                  <td colspan="8" style="text-align:center;">
+                    No payments pending approval.
+                  </td>
+                </tr>
+              <% } %>
+
+              <% payments.forEach(payment => { %>
+                <% const bill = payment.bill; %>
+                <% const user = payment.user; %>
+
+                <% if (bill && user) { %>
+                <tr data-status="approval">
+
+                  <!-- Due Date -->
+                  <td>
+                    <%= new Date(bill.dueDate).toLocaleDateString('en-US') %>
+                  </td>
+
+                  <!-- Amount -->
+                  <td>
+                    ₱ <%= Number(bill.amount || 0).toFixed(2) %>
+                  </td>
+
+                  <!-- Homeowner Ref -->
+                  <td>
+                    <%= user.referenceNumber || '-' %>
+                  </td>
+
+                  <!-- Name -->
+                  <td>
+                    <%= user.givenName %> <%= user.surname %>
+                  </td>
+
+                  <!-- Email -->
+                  <td>
+                    <%= user.email %>
+                  </td>
+
+                  <!-- Village -->
+                  <td>
+                    <%= user.village || '-' %>
+                  </td>
+
+                  <!-- Block -->
+                  <td>
+                    <%= user.blockLot || '-' %>
+                  </td>
+
+                  <!-- Actions -->
+                  <td>
+  <div class="actions">
+    <div class="action">
+      <img src="/img/pin.png">
+    </div>
+    <div class="action">
+      <img src="/img/notif.png">
+    </div>
+    <div class="action">
+      <img src="/img/view.png">
+    </div>
+  </div>
+                  </td>
+
+                </tr>
+                <% } %>
+              <% }) %>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

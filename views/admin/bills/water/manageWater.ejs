@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Account Water</title>
+
+  <link rel="stylesheet" href="/css/manageBill.css">
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <%- include('../../../partials/adminTopbar', { title: title }) %>
+
+  <div class="container">
+
+    <!-- SIDEBAR -->
+    <%- include('../../../partials/adminSidebar', { page: 'memberships' }) %>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <div class="wrapper">
+
+        <!-- TOP BAR -->
+        <div class="top-bar">
+          <div class="search">
+            <input type="text" id="searchInput" placeholder="Search">
+            <button>🔍</button>
+          </div>
+
+          <div class="filters">
+            <select>
+              <option>Village: All</option>
+            </select>
+
+            <select>
+              <option>Block: All</option>
+            </select>
+
+            <select>
+              <option>Archives: All</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- DATE / TIME -->
+        <div class="date-time">
+          <input type="date" id="dateInput">
+          <input type="time" id="timeInput">
+        </div>
+
+        <!-- STATUS CARDS -->
+        <div class="status-row">
+          <div id="tab-unpaid"
+               class="status unpaid"
+               onclick="filterBills('unpaid', this)">
+            <span>54</span> Unpaid for this Month
+          </div>
+
+<a href="/admin/bills/water/paymentApproval" style="text-decoration:none; color:inherit;">
+  <div id="tab-approval" class="status approval">
+    <span><%= approvalCount || 0 %></span> For Payment Approval
+  </div>
+</a>
+
+          <div id="tab-due"
+               class="status due"
+               onclick="filterBills('due', this)">
+            <span>100</span> Due Bills
+          </div>
+
+          <div id="tab-completed"
+               class="status completed"
+               onclick="filterBills('completed', this)">
+            <span>23</span> Payment Completed
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>Due Date</th>
+                <th>Amount</th>
+                <th>H.O Ref No.</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Village</th>
+                <th>Block</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="tableBody">
+
+              <tr data-status="unpaid">
+                <td>03/01/2026</td>
+                <td>₱ 1,500.00</td>
+                <td>1234567891020</td>
+                <td>Sample11</td>
+                <td>sample11@gmail.com</td>
+                <td>Grand Catalina</td>
+                <td>B09</td>
+                <td>
+                  <div class="actions">
+                    <div class="action">
+                      <img src="/img/pin.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/notif.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/view.png">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr data-status="due">
+                <td>03/03/2026</td>
+                <td>₱ 1,200.00</td>
+                <td>333333333</td>
+                <td>Pedro</td>
+                <td>pedro@gmail.com</td>
+                <td>Grand Catalina</td>
+                <td>B09</td>
+                <td>
+                  <div class="actions">
+                    <div class="action">
+                      <img src="/img/pin.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/notif.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/view.png">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr data-status="due">
+                <td>03/04/2026</td>
+                <td>₱ 1,800.00</td>
+                <td>555555555</td>
+                <td>Maria</td>
+                <td>maria@gmail.com</td>
+                <td>Grand Catalina</td>
+                <td>B10</td>
+                <td>
+                  <div class="actions">
+                    <div class="action">
+                      <img src="/img/pin.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/notif.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/view.png">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr data-status="due">
+                <td>03/05/2026</td>
+                <td>₱ 950.00</td>
+                <td>666666666</td>
+                <td>Carlos</td>
+                <td>carlos@gmail.com</td>
+                <td>Grand Catalina</td>
+                <td>B11</td>
+                <td>
+                  <div class="actions">
+                    <div class="action">
+                      <img src="/img/pin.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/notif.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/view.png">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr data-status="completed">
+                <td>03/07/2026</td>
+                <td>₱ 1,500.00</td>
+                <td>444444444</td>
+                <td>Ana</td>
+                <td>ana@gmail.com</td>
+                <td>Grand Catalina</td>
+                <td>B09</td>
+                <td>
+                  <div class="actions">
+                    <div class="action">
+                      <img src="/img/pin.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/notif.png">
+                    </div>
+                    <div class="action">
+                      <img src="/img/view.png">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function filterBills(status, clickedTab) {
+      const rows = document.querySelectorAll('#tableBody tr');
+      const tabs = document.querySelectorAll('.status-row .status');
+
+      tabs.forEach(tab => tab.classList.remove('active'));
+      clickedTab.classList.add('active');
+
+      rows.forEach(row => {
+        if (row.dataset.status === status) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

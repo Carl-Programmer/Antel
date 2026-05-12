@@ -7,6 +7,8 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const WaterBill = require('../models/WaterBill');
+const WaterPayment = require('../models/WaterPayment');
 
 //===========================================
 // Admin Dashboard Routes
@@ -73,9 +75,14 @@ router.get('/feedbacks', (req, res) => {
   });
 });
 // WATER
-router.get('/bills/water/manageWater', (req, res) => {
+router.get('/bills/water/manageWater', async (req, res) => {
+  const approvalCount = await WaterPayment.countDocuments({
+    status: 'pending'
+  });
+
   res.render('admin/bills/water/manageWater', {
-    title: 'Manage Water Bills'
+    title: 'Manage Water Bills',
+    approvalCount
   });
 });
 
@@ -183,7 +190,6 @@ router.get('/bills/water/uploadForm/:userId', async (req, res) => {
   });
 });
 // HANDLE UPLOAD
-const WaterBill = require('../models/WaterBill');
 
 router.post('/bills/water/upload', upload.single('bill'), async (req, res) => {
   try {
@@ -207,6 +213,29 @@ router.post('/bills/water/upload', upload.single('bill'), async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Upload failed');
+  }
+});
+
+// =======================================================
+// 💳 WATER BILL PAYMENT APPROVAL
+// =======================================================
+router.get('/bills/water/paymentApproval', async (req, res) => {
+  try {
+    const payments = await WaterPayment.find({
+      status: 'pending'
+    })
+      .populate('user')
+      .populate('bill')
+      .sort({ uploadedAt: -1 });
+
+    res.render('admin/bills/water/paymentApproval', {
+      title: 'Water Bill Payment Approval',
+      payments
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading payment approvals.');
   }
 });
 

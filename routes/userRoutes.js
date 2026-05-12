@@ -7,6 +7,7 @@ const fs = require('fs');
 const User = require('../models/user');
 const Membership = require('../models/Membership');
 const WaterBill = require('../models/WaterBill');
+const WaterPayment = require('../models/WaterPayment');
 
 // =======================================================
 // 🔐 AUTH MIDDLEWARE
@@ -93,6 +94,105 @@ router.get('/water-bill', async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+//========================================
+// Water Bill Payment Page
+//========================================
+// =======================================================
+// 💧 USER WATER BILL PAYMENT PAGE
+// =======================================================
+
+router.get('/water-bill-pay', async (req, res) => {
+  try {
+    // Make sure user is logged in
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+
+    const userId = req.session.user._id;
+
+    // Get the nearest unpaid water bill
+    const bill = await WaterBill.findOne({
+      user: userId,
+      status: 'unpaid'
+    }).sort({ dueDate: 1 });
+
+    // If there is no unpaid bill
+    if (!bill) {
+      return res.send('No unpaid water bills.');
+    }
+
+    // Get user information (for reference number)
+    const user = await User.findById(userId);
+
+    // Render payment page
+    res.render('users/water-bill-pay', {
+      title: 'Water Bill Payment',
+      bill,
+      user
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading water bill payment page.');
+  }
+});
+
+
+// Create folder if it doesn't exist
+const waterReceiptPath = 'uploads/waterReceipts';
+if (!fs.existsSync(waterReceiptPath)) {
+  fs.mkdirSync(waterReceiptPath, { recursive: true });
+}
+
+//========================================================
+//upload water bill payment receipt
+//========================================================
+// Multer storage for water receipts
+const waterReceiptStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, waterReceiptPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+// Multer instance
+const waterReceiptUpload = multer({
+  storage: waterReceiptStorage
+});
+
+// Upload receipt route
+router.post(
+  '/water-bill-pay/upload',
+  waterReceiptUpload.single('receipt'),
+  async (req, res) => {
+    try {
+      const userId = req.session.user._id;
+      const { billId } = req.body;
+
+      if (!req.file) {
+        return res.send('No receipt uploaded.');
+      }
+
+      const payment = new WaterPayment({
+        bill: billId,
+        user: userId,
+        receipt: req.file.filename,
+        status: 'pending'
+      });
+
+      await payment.save();
+
+      res.redirect('/user/water-bill');
+
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Receipt upload failed.');
+    }
+  }
+);
 
 //========================================
 // Multer setup for profile picture upload

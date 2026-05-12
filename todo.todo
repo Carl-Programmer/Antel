@@ -3,10 +3,10 @@ To do:
 USERS
 
 Login - done
-Register - in progress
+Register - done
 Profile edit - done
-Auto verify registers
-Forgot & reset Pass - in progress
+Auto verify registers - done
+Forgot & reset Pass - done
 make annoucement dynamic
 
 ADMIN
@@ -14,3 +14,8 @@ ADMIN
 Show users in admin - done
 Edit users
 Create post to user side
+
+Flow
+
+After Bill payment posting by admin it will appear in (for payment approval tab) in manage accounts
+when the user payed their bill
