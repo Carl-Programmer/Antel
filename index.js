@@ -2,7 +2,7 @@ require('dotenv').config(); // 👈 ADDED: Loads variables from the .env file
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const User = require('./models/user'); // 👈 ADDED: Import User model for global access
+const User = require('./models/User'); // 👈 ADDED: Import User model for global access
 
 // 👈 UPDATED: Uses port from .env, or defaults to 3000 if not found
 const PORT = process.env.PORT || 3000; 
