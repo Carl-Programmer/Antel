@@ -52,11 +52,6 @@ router.get('/settings', (req, res) => {
 //gym
 
 
-//chaneg password route
-router.get('/change-password', (req, res) => {
-  res.render('users/changePassword', { title: 'Change Password' });
-});
-
 //===============================================
 // Water Bill View
 //===============================================
@@ -277,6 +272,103 @@ router.post('/profile', upload.single('profilePic'), async (req, res) => {
         console.error(err);
         res.send('Error saving profile');
     }
+});
+
+// ============================
+// Change Password Routes
+// ============================
+
+// GET Change Password Page
+router.get('/change-password', (req, res) => {
+  // User must be logged in
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  // Get one-time message from session
+  const message = req.session.message || null;
+  delete req.session.message;
+
+  // IMPORTANT: Pass "message" to EJS
+  res.render('users/changePassword', {
+    title: 'Change Password',
+    user: req.session.user,
+    message: message
+  });
+});
+
+
+// POST Change Password
+router.post('/users/change-password', async (req, res) => {
+  try {
+    // User must be logged in
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const userId = req.session.user._id;
+
+    // Find user
+    const user = await User.findById(userId);
+
+    if (!user) {
+      req.session.message = '❌ User not found.';
+      return res.redirect('/login');
+    }
+
+    // Verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isMatch) {
+      req.session.message = '❌ Incorrect current password.';
+      return res.redirect('/users/change-password');
+    }
+
+    // Check if new passwords match
+    if (newPassword !== confirmPassword) {
+      req.session.message = '❌ Passwords do not match.';
+      return res.redirect('/users/change-password');
+    }
+
+    // Strong password validation:
+    // - At least 12 characters
+    // - At least 1 uppercase
+    // - At least 1 lowercase
+    // - At least 1 number
+    // - At least 1 special character
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[{\]};:'",<.>\/?\\|`~]).{12,}$/;
+
+    if (!strongPasswordRegex.test(newPassword)) {
+      req.session.message =
+        '❌ Password must be at least 12 characters and include uppercase, lowercase, number, and special character.';
+      return res.redirect('/users/change-password');
+    }
+
+    // Prevent reusing the current password
+    const sameAsCurrent = await bcrypt.compare(newPassword, user.password);
+
+    if (sameAsCurrent) {
+      req.session.message =
+        '❌ New password must be different from your current password.';
+      return res.redirect('/users/change-password');
+    }
+
+    // Save new password
+    // Do NOT hash here if your User model already hashes in a pre-save hook
+    user.password = newPassword;
+    await user.save();
+
+    // Success message
+    req.session.message = '✅ Password successfully updated!';
+    return res.redirect('/users/change-password');
+
+  } catch (err) {
+    console.error('Error changing password:', err);
+    req.session.message = '❌ Server error changing password.';
+    return res.redirect('/users/change-password');
+  }
 });
 
 //================================================================

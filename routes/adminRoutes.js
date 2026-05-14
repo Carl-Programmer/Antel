@@ -121,23 +121,8 @@ router.post('/update-status/:id', async (req, res) => {
     }
 });
 
-// ✏️ EDIT USER ROUTE (Placeholder)
-router.get('/edit-user/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
-        
-        if (!user) {
-            return res.send('User not found');
-        }
 
-        // For now, just send text. 
-        // Later, change this to: res.render('admin/editUser', { user });
-        res.send(`This will be the edit page for ${user.givenName} ${user.surname}.`);
-    } catch (err) {
-        console.error(err);
-        res.send('Error loading edit page');
-    }
-});
+
 
 
 // 🔐 simple admin guard (adjust if you have middleware)
@@ -147,6 +132,130 @@ function isAdmin(req, res, next) {
   }
   next();
 }
+
+// ============================
+// Edit User Routes (Admin)
+// ============================
+
+router.get('/users/edit/:id', async (req, res) => {
+  try {
+    // Only allow admins
+    if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/login');
+    }
+
+    // Find user by ID
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      req.session.message = '❌ User not found.';
+      return res.redirect('/admin/users');
+    }
+
+    // Render edit-user.ejs
+    res.render('admin/edit-user', {
+      title: 'Edit Users',
+      user
+    });
+
+  } catch (err) {
+    console.error('Error loading edit user page:', err);
+    req.session.message = '❌ Error loading user.';
+    return res.redirect('/admin/users');
+  }
+});
+
+
+// POST Save Edited User
+// Final URL: /admin/users/edit/:id
+// Redirects to the Users page (users.ejs) via /admin/users
+router.post('/users/edit/:id', async (req, res) => {
+  try {
+    // Only allow admins
+    if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/login');
+    }
+
+    const {
+      givenName,
+      surname,
+      gender,
+      contact,
+      citizenship,
+      birthdate,
+      village,
+      blockLot,
+      referenceNumber,
+      ownershipType,
+      role
+    } = req.body;
+
+    // Update user
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        givenName,
+        surname,
+        gender,
+        contact,
+        citizenship,
+        birthdate,
+        village,
+        blockLot,
+        referenceNumber,
+        ownershipType,
+        role
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
+    if (!updatedUser) {
+      req.session.message = '❌ User not found.';
+      return res.redirect('/admin/users');
+    }
+
+    req.session.message = '✅ User successfully updated!';
+    return res.redirect('/admin/users'); // loads users.ejs
+  } catch (err) {
+    console.error('Error updating user:', err);
+    req.session.message = '❌ Error updating user.';
+    return res.redirect('/admin/users');
+  }
+});
+
+
+// POST Archive User Account
+// Final URL: /admin/users/archive/:id
+// Redirects to the Users page (users.ejs) via /admin/users
+router.post('/users/archive/:id', async (req, res) => {
+  try {
+    // Only allow admins
+    if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/login');
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { status: 'archived' },
+      { new: true }
+    );
+
+    if (!user) {
+      req.session.message = '❌ User not found.';
+      return res.redirect('/admin/users');
+    }
+
+    req.session.message = '📦 User account archived successfully.';
+    return res.redirect('/admin/users'); // loads users.ejs
+  } catch (err) {
+    console.error('Error archiving user:', err);
+    req.session.message = '❌ Error archiving user.';
+    return res.redirect('/admin/users');
+  }
+});
 
 // =======================================================
 // 💧 MANAGE WATER BILLS

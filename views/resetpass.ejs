@@ -78,25 +78,40 @@ function clearFields(){
 /* =========================
    CONFIRM RESET PASSWORD
 ========================= */
-function confirmReset(){
+function confirmReset() {
   const urlParams = new URLSearchParams(window.location.search);
   const email = urlParams.get("email");
 
   const newPass = document.getElementById("newPassword").value;
   const confirmPass = document.getElementById("confirmPassword").value;
 
-  if(!email){
+  if (!email) {
     alert("Session expired. Please try again.");
     window.location.href = "/forgot";
     return;
   }
 
-  if(newPass.length < 1){
-    alert("Password must be at least 12 characters.");
+  // Password must be:
+  // - At least 12 characters
+  // - At least 1 uppercase letter
+  // - At least 1 lowercase letter
+  // - At least 1 number
+  // - At least 1 special character
+  const strongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[{\]};:'",<.>\/?\\|`~]).{12,}$/;
+
+  if (!strongPasswordRegex.test(newPass)) {
+    alert(
+      "Password must be at least 12 characters long and include:\n" +
+      "- 1 uppercase letter\n" +
+      "- 1 lowercase letter\n" +
+      "- 1 number\n" +
+      "- 1 special character"
+    );
     return;
   }
 
-  if(newPass !== confirmPass){
+  if (newPass !== confirmPass) {
     alert("Passwords do not match.");
     return;
   }
@@ -106,19 +121,19 @@ function confirmReset(){
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password: newPass })
   })
-  .then(res => res.json())
-  .then(data => {
-    if(data.success){
-      alert("Password reset successful!");
-      window.location.href = "/login";
-    } else {
-      alert("Reset failed");
-    }
-  })
-  .catch(err => {
-    alert("Server error");
-    console.error(err);
-  });
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("Password reset successful!");
+        window.location.href = "/login";
+      } else {
+        alert("Reset failed");
+      }
+    })
+    .catch(err => {
+      alert("Server error");
+      console.error(err);
+    });
 }
 </script>
 

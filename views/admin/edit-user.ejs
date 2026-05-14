@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/admin/manageUser.css">
+</head>
+<body>
+  <%- include('../partials/adminTopbar', { title: 'Manage Users' }) %>
+
+  <div class="container">
+    <%- include('../partials/adminSidebar', { page: 'users' }) %>
+
+    <div class="main">
+      <div class="form-wrapper">
+
+        <!-- Main Edit Form -->
+        <form action="/admin/users/edit/<%= user._id %>" method="POST">
+
+          <div class="form-grid">
+
+            <!-- LEFT COLUMN -->
+            <div>
+
+              <div class="section-title">I. Personal Information</div>
+
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="givenName"
+                  placeholder="Given Name"
+                  value="<%= user.givenName || '' %>"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="surname"
+                  placeholder="Surname"
+                  value="<%= user.surname || '' %>"
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <select id="gender" name="gender">
+                  <option value="">Gender</option>
+                  <option value="Male" <%= user.gender === 'Male' ? 'selected' : '' %>>
+                    Male
+                  </option>
+                  <option value="Female" <%= user.gender === 'Female' ? 'selected' : '' %>>
+                    Female
+                  </option>
+                </select>
+                <img
+                  src="/img/dropdown-logo.png"
+                  class="field-icon"
+                  onclick="openDropdown('gender')"
+                >
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="contact"
+                  placeholder="Contact No."
+                  value="<%= user.contact || '' %>"
+                >
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="citizenship"
+                  placeholder="Citizenship"
+                  value="<%= user.citizenship || '' %>"
+                >
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="date"
+                  id="birthdate"
+                  name="birthdate"
+                  value="<%= user.birthdate ? new Date(user.birthdate).toISOString().split('T')[0] : '' %>"
+                >
+                <img
+                  src="/img/calendar-logo.png"
+                  class="field-icon"
+                  onclick="document.getElementById('birthdate').showPicker()"
+                >
+              </div>
+
+              <div class="form-group">
+                <select id="village" name="village">
+                  <option value="">Village</option>
+                  <option value="Grand Flores" <%= user.village === 'Grand Flores' ? 'selected' : '' %>>
+                    Grand Flores
+                  </option>
+                  <option value="Grand Catalina" <%= user.village === 'Grand Catalina' ? 'selected' : '' %>>
+                    Grand Catalina
+                  </option>
+                  <option value="Grand Meadows" <%= user.village === 'Grand Meadows' ? 'selected' : '' %>>
+                    Grand Meadows
+                  </option>
+                </select>
+                <img
+                  src="/img/dropdown-logo.png"
+                  class="field-icon"
+                  onclick="openDropdown('village')"
+                >
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="blockLot"
+                  placeholder="Block / Lot"
+                  value="<%= user.blockLot || '' %>"
+                >
+              </div>
+
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="referenceNumber"
+                  placeholder="Reference Number"
+                  value="<%= user.referenceNumber || '' %>"
+                >
+              </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div>
+
+              <div class="section-title">II. Ownership Type</div>
+
+              <div class="form-group">
+                <select id="ownership" name="ownershipType">
+                  <option value="Homeowner"
+                    <%= user.ownershipType === 'Homeowner' ? 'selected' : '' %>>
+                    Homeowner
+                  </option>
+                  <option value="Tenant"
+                    <%= user.ownershipType === 'Tenant' ? 'selected' : '' %>>
+                    Tenant
+                  </option>
+                </select>
+                <img
+                  src="/img/dropdown-logo.png"
+                  class="field-icon"
+                  onclick="openDropdown('ownership')"
+                >
+              </div>
+
+              <div class="section-title">III. Account Role</div>
+
+<div class="form-group">
+  <select
+    id="role"
+    name="role"
+    <%= user.role === 'admin' ? 'disabled' : '' %>
+  >
+    <option value="user"
+      <%= user.role === 'user' ? 'selected' : '' %>>
+      User
+    </option>
+    <option value="admin"
+      <%= user.role === 'admin' ? 'selected' : '' %>>
+      Admin
+    </option>
+  </select>
+
+  <!-- Keep the admin role value submitted even when the select is disabled -->
+  <% if (user.role === 'admin') { %>
+    <input type="hidden" name="role" value="admin">
+  <% } %>
+
+  <img
+    src="/img/dropdown-logo.png"
+    class="field-icon"
+    <% if (user.role !== 'admin') { %>
+      onclick="openDropdown('role')"
+    <% } %>
+  >
+</div>
+
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="button-area">
+
+            <div class="button-group">
+              <button
+                type="button"
+                class="btn btn-cancel"
+                onclick="window.location.href='/admin/users'"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-save"
+              >
+                Save Changes
+              </button>
+            </div>
+
+        </form>
+
+            <!-- Archive Form -->
+            <form
+              action="/admin/users/archive/<%= user._id %>"
+              method="POST"
+              onsubmit="return confirm('Archive this account?')"
+            >
+              <button type="submit" class="btn btn-archive">
+                <img src="/img/archive-logo.png">
+                Archive this Account
+              </button>
+            </form>
+
+          </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openDropdown(id) {
+      document.getElementById(id).focus();
+      document.getElementById(id).click();
+    }
+  </script>
+</body>
+</html>

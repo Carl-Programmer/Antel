@@ -19,3 +19,30 @@ Flow
 
 After Bill payment posting by admin it will appear in (for payment approval tab) in manage accounts
 when the user payed their bill
+
+
+
+BUG
+
+User Side
+
+Change Password inside settings not working - pending
+
+Forgot password
+Still accepts weak/ short passwords. must be 12 chars includes upper,lower,symbols and numbers - pending
+
+Payment History
+-New added bill still listed
+-Current balance adds with prev bills
+-New bill not loading when clicked pay now; prev bill still appear
+
+Admin Side
+
+Manage users
+No roles editor (admin/user) - pending
+
+Fitness Station
+No actions available aside on  approved
+
+Water Bill
+No actions available

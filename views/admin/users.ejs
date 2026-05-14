@@ -48,9 +48,14 @@
               </select>
             </td>
 
-            <td>
-               <a href="/admin/edit-user/<%= user._id %>" style="text-decoration: none; padding: 4px 8px; background: blue; color: white; border-radius: 4px;">Edit</a>
-            </td>
+<td>
+  <a
+    href="/admin/users/edit/<%= user._id %>"
+    style="text-decoration: none; padding: 4px 8px; background: blue; color: white; border-radius: 4px;"
+  >
+    Edit
+  </a>
+</td>
           </tr>
         <% }) %>
       </tbody>
