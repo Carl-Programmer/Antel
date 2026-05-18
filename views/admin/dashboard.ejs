@@ -9,6 +9,15 @@
 </head>
 
 <body>
+  <%
+  // Define default values so the page never crashes
+  const safeTotalUsers = typeof totalUsers !== 'undefined' ? totalUsers : 0;
+  const safePendingDues = typeof pendingDues !== 'undefined' ? pendingDues : 0;
+  const safeAppointments = typeof appointments !== 'undefined' ? appointments : 0;
+  const safeGymMembers = typeof gymMembers !== 'undefined' ? gymMembers : 0;
+  const safeOtherConcerns = typeof otherConcerns !== 'undefined' ? otherConcerns : 0;
+  const safeFeedbacks = typeof feedbacks !== 'undefined' ? feedbacks : 0;
+%>
 
 <%- include('../partials/adminTopbar', { title: 'Dashboard' }) %>
 
@@ -36,45 +45,45 @@
         </div>
       </div>
 
-      <div class="cards">
+<div class="cards">
 
-        <div class="stat-card">
-          <h3>User</h3>
-          <div class="stat-number">120</div>
-          <p>Total Users</p>
-        </div>
+  <div class="stat-card">
+    <h3>User</h3>
+    <div class="stat-number"><%= safeTotalUsers %></div>
+    <p>Total Users</p>
+  </div>
 
-        <div class="stat-card">
-          <h3>Pending Dues</h3>
-          <div class="stat-number">67</div>
-          <p>Total of Unpaid Users</p>
-        </div>
+  <div class="stat-card">
+    <h3>Pending Dues</h3>
+    <div class="stat-number"><%= safePendingDues %></div>
+    <p>Total of Unpaid Users</p>
+  </div>
 
-        <div class="stat-card">
-          <h3>Appointment</h3>
-          <div class="stat-number">24</div>
-          <p>Active Appointment</p>
-        </div>
+  <div class="stat-card">
+    <h3>Appointment</h3>
+    <div class="stat-number"><%= safeAppointments %></div>
+    <p>Active Appointment</p>
+  </div>
 
-        <div class="stat-card">
-          <h3>Gym Members</h3>
-          <div class="stat-number">15</div>
-          <p>Active Members</p>
-        </div>
+  <div class="stat-card">
+    <h3>Gym Members</h3>
+    <div class="stat-number"><%= safeGymMembers %></div>
+    <p>Active Members</p>
+  </div>
 
-        <div class="stat-card">
-          <h3>Other Concerns</h3>
-          <div class="stat-number">2</div>
-          <p>Active Concerns</p>
-        </div>
+  <div class="stat-card">
+    <h3>Other Concerns</h3>
+    <div class="stat-number"><%= safeOtherConcerns %></div>
+    <p>Active Concerns</p>
+  </div>
 
-        <div class="stat-card">
-          <h3>Feedbacks</h3>
-          <div class="stat-number">15</div>
-          <p>Ongoing Feedbacks</p>
-        </div>
+  <div class="stat-card">
+    <h3>Feedbacks</h3>
+    <div class="stat-number"><%= safeFeedbacks %></div>
+    <p>Ongoing Feedbacks</p>
+  </div>
 
-      </div>
+</div>
 
     </div>
 

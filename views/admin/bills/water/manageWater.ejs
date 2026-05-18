@@ -49,33 +49,49 @@
           <input type="time" id="timeInput">
         </div>
 
-        <!-- STATUS CARDS -->
-        <div class="status-row">
-          <div id="tab-unpaid"
-               class="status unpaid"
-               onclick="filterBills('unpaid', this)">
-            <span>54</span> Unpaid for this Month
-          </div>
+<!-- STATUS CARDS -->
+<div class="status-row">
 
-<a href="/admin/bills/water/paymentApproval" style="text-decoration:none; color:inherit;">
-  <div id="tab-approval" class="status approval">
-    <span><%= approvalCount || 0 %></span> For Payment Approval
-  </div>
-</a>
+  <a href="/admin/bills/water/manageWater?tab=unpaid"
+     style="text-decoration:none; color:inherit;">
+    <div class="status unpaid <%= tab === 'unpaid' ? 'active' : '' %>">
+      <span><%= unpaidCount %></span> Unpaid for this Month
+    </div>
+  </a>
 
-          <div id="tab-due"
-               class="status due"
-               onclick="filterBills('due', this)">
-            <span>100</span> Due Bills
-          </div>
+  <a href="/admin/bills/water/manageWater?tab=approval"
+     style="text-decoration:none; color:inherit;">
+    <div class="status approval <%= tab === 'approval' ? 'active' : '' %>">
+      <span><%= approvalCount %></span> For Payment Approval
+    </div>
+  </a>
 
-          <div id="tab-completed"
-               class="status completed"
-               onclick="filterBills('completed', this)">
-            <span>23</span> Payment Completed
-          </div>
-        </div>
+  <a href="/admin/bills/water/manageWater?tab=due"
+     style="text-decoration:none; color:inherit;">
+    <div class="status due <%= tab === 'due' ? 'active' : '' %>">
+      <span><%= dueCount %></span> Due Bills
+    </div>
+  </a>
 
+  <a href="/admin/bills/water/manageWater?tab=completed"
+     style="text-decoration:none; color:inherit;">
+    <div class="status completed <%= tab === 'completed' ? 'active' : '' %>">
+      <span><%= completedCount %></span> Payment Completed
+    </div>
+  </a>
+
+</div>
+<!-- VIEW PANEL (hidden by default) -->
+<div class="view-panel" id="viewPanel" style="display:none; margin-bottom:20px;">
+  <button
+    type="button"
+    onclick="closeView()"
+    style="margin-bottom:15px; padding:8px 16px; cursor:pointer;">
+    ← Back to Table
+  </button>
+
+  <div id="viewContent"></div>
+</div>
         <!-- TABLE -->
         <div class="table-box">
           <table>
@@ -92,148 +108,314 @@
               </tr>
             </thead>
 
-            <tbody id="tableBody">
+<tbody id="tableBody">
 
-              <tr data-status="unpaid">
-                <td>03/01/2026</td>
-                <td>₱ 1,500.00</td>
-                <td>1234567891020</td>
-                <td>Sample11</td>
-                <td>sample11@gmail.com</td>
-                <td>Grand Catalina</td>
-                <td>B09</td>
-                <td>
-                  <div class="actions">
-                    <div class="action">
-                      <img src="/img/pin.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/notif.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/view.png">
-                    </div>
-                  </div>
-                </td>
-              </tr>
+  <!-- PAYMENT APPROVAL TAB -->
+  <% if (tab === 'approval') { %>
 
-              <tr data-status="due">
-                <td>03/03/2026</td>
-                <td>₱ 1,200.00</td>
-                <td>333333333</td>
-                <td>Pedro</td>
-                <td>pedro@gmail.com</td>
-                <td>Grand Catalina</td>
-                <td>B09</td>
-                <td>
-                  <div class="actions">
-                    <div class="action">
-                      <img src="/img/pin.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/notif.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/view.png">
-                    </div>
-                  </div>
-                </td>
-              </tr>
+    <% if (!payments || payments.length === 0) { %>
+      <tr>
+        <td colspan="8" style="text-align:center;">
+          No payments pending approval.
+        </td>
+      </tr>
+    <% } %>
 
-              <tr data-status="due">
-                <td>03/04/2026</td>
-                <td>₱ 1,800.00</td>
-                <td>555555555</td>
-                <td>Maria</td>
-                <td>maria@gmail.com</td>
-                <td>Grand Catalina</td>
-                <td>B10</td>
-                <td>
-                  <div class="actions">
-                    <div class="action">
-                      <img src="/img/pin.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/notif.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/view.png">
-                    </div>
-                  </div>
-                </td>
-              </tr>
+    <% payments.forEach(payment => { %>
+      <% const bill = payment.bill; %>
+      <% const user = payment.user; %>
 
-              <tr data-status="due">
-                <td>03/05/2026</td>
-                <td>₱ 950.00</td>
-                <td>666666666</td>
-                <td>Carlos</td>
-                <td>carlos@gmail.com</td>
-                <td>Grand Catalina</td>
-                <td>B11</td>
-                <td>
-                  <div class="actions">
-                    <div class="action">
-                      <img src="/img/pin.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/notif.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/view.png">
-                    </div>
-                  </div>
-                </td>
-              </tr>
+      <% if (bill && user) { %>
+        <tr>
+          <td>
+            <%= new Date(bill.dueDate).toLocaleDateString('en-US') %>
+          </td>
+          <td>
+            ₱ <%= Number(bill.amount || 0).toFixed(2) %>
+          </td>
+          <td>
+            <%= user.referenceNumber || '-' %>
+          </td>
+          <td>
+            <%= user.givenName %> <%= user.surname %>
+          </td>
+          <td>
+            <%= user.email %>
+          </td>
+          <td>
+            <%= user.village || '-' %>
+          </td>
+          <td>
+            <%= user.blockLot || '-' %>
+          </td>
+          <td>
+            <div class="actions">
+              <div class="action">
+                <img src="/img/pin.png">
+              </div>
+              <div class="action">
+                <img src="/img/notif.png">
+              </div>
+<div class="action"
+     style="cursor: pointer;"
+     onclick='openView(
+       "<%= user.referenceNumber || "-" %>",
+       "<%= new Date(bill.dueDate).toLocaleDateString("en-US", {
+         year: "numeric",
+         month: "long",
+         day: "numeric"
+       }) %>",
+       "<%= Number(bill.amount || 0).toFixed(2) %>",
+       "<%= bill.file || "" %>",
+       true,
+       "<%= payment.receipt || "" %>",
+       "<%= payment._id %>"
+     )'>
+  <img src="/img/view.png" style="cursor: pointer;">
+</div>
+            </div>
+          </td>
+        </tr>
+      <% } %>
+    <% }) %>
 
-              <tr data-status="completed">
-                <td>03/07/2026</td>
-                <td>₱ 1,500.00</td>
-                <td>444444444</td>
-                <td>Ana</td>
-                <td>ana@gmail.com</td>
-                <td>Grand Catalina</td>
-                <td>B09</td>
-                <td>
-                  <div class="actions">
-                    <div class="action">
-                      <img src="/img/pin.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/notif.png">
-                    </div>
-                    <div class="action">
-                      <img src="/img/view.png">
-                    </div>
-                  </div>
-                </td>
-              </tr>
 
-            </tbody>
-          </table>
+  <!-- OTHER TABS (UNPAID, DUE, COMPLETED) -->
+  <% } else { %>
+
+    <% if (!bills || bills.length === 0) { %>
+      <tr>
+        <td colspan="8" style="text-align:center;">
+          No records found.
+        </td>
+      </tr>
+    <% } %>
+
+    <% bills.forEach(bill => { %>
+      <% const user = bill.user; %>
+
+      <% if (user) { %>
+        <tr>
+          <td>
+            <%= new Date(
+              tab === 'completed' && bill.paidAt
+                ? bill.paidAt
+                : bill.dueDate
+            ).toLocaleDateString('en-US') %>
+          </td>
+
+          <td>
+            ₱ <%= Number(bill.amount || 0).toFixed(2) %>
+          </td>
+
+          <td>
+            <%= user.referenceNumber || '-' %>
+          </td>
+
+          <td>
+            <%= user.givenName %> <%= user.surname %>
+          </td>
+
+          <td>
+            <%= user.email %>
+          </td>
+
+          <td>
+            <%= user.village || '-' %>
+          </td>
+
+          <td>
+            <%= user.blockLot || '-' %>
+          </td>
+
+          <td>
+            <div class="actions">
+              <div class="action">
+                <img src="/img/pin.png">
+              </div>
+              <div class="action">
+                <img src="/img/notif.png">
+              </div>
+<div class="action"
+     style="cursor: pointer;"
+     onclick='openView(
+       "<%= user.referenceNumber || "-" %>",
+       "<%= new Date(bill.dueDate).toLocaleDateString("en-US", {
+         year: "numeric",
+         month: "long",
+         day: "numeric"
+       }) %>",
+       "<%= Number(bill.amount || 0).toFixed(2) %>",
+       "<%= bill.file || "" %>"
+     )'>
+  <img src="/img/view.png">
+</div>
+            </div>
+          </td>
+        </tr>
+      <% } %>
+    <% }) %>
+
+  <% } %>
+
+</tbody>
         </div>
 
       </div>
     </div>
   </div>
 
-  <script>
-    function filterBills(status, clickedTab) {
-      const rows = document.querySelectorAll('#tableBody tr');
-      const tabs = document.querySelectorAll('.status-row .status');
+<script>
+  function openView(
+    referenceNumber,
+    dueDate,
+    amount,
+    file,
+    isApproval = false,
+    receipt = '',
+    paymentId = ''
+  ) {
+    const viewPanel = document.getElementById('viewPanel');
+    const viewContent = document.getElementById('viewContent');
+    const tableBox = document.querySelector('.table-box');
 
-      tabs.forEach(tab => tab.classList.remove('active'));
-      clickedTab.classList.add('active');
+    let approvalSection = '';
 
-      rows.forEach(row => {
-        if (row.dataset.status === status) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
+    if (isApproval) {
+      approvalSection = `
+        <div style="margin-top: 30px;">
+          <h3 style="margin-bottom: 15px;">Payment Receipt</h3>
+
+          ${
+            receipt
+              ? `
+                <a href="/uploads/waterReceipts/${receipt}" target="_blank">
+                  <iframe
+                    src="/uploads/waterReceipts/${receipt}#toolbar=0&navpanes=0&scrollbar=0"
+                    width="250"
+                    height="250"
+                    style="
+                      border:none;
+                      border-radius:12px;
+                      background:white;
+                      box-shadow:0 4px 10px rgba(0,0,0,0.15);
+                      display:block;
+                    ">
+                  </iframe>
+                </a>
+              `
+              : '<p>No receipt uploaded.</p>'
+          }
+
+          <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <button
+              type="button"
+              style="
+                padding: 10px 20px;
+                background: #28a745;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+              ">
+              Approve
+            </button>
+
+            <button
+              type="button"
+              style="
+                padding: 10px 20px;
+                background: #dc3545;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+              ">
+              Reject
+            </button>
+          </div>
+        </div>
+      `;
     }
-  </script>
+
+    viewContent.innerHTML = `
+      <div class="bill-card">
+        <div class="bill-left">
+
+          <div class="info-row">
+            <span>REFERENCE NO.</span>
+            <strong>${referenceNumber}</strong>
+          </div>
+
+          <div class="info-row">
+            <span>DUE DATE</span>
+            <strong>${dueDate}</strong>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="amount-row">
+            <span>AMOUNT TO BE PAY</span>
+            <div class="amount-value">
+              ₱ ${amount}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bill-preview">
+          ${
+            file
+              ? `
+                <a href="/uploads/waterBills/${file}" target="_blank">
+                  <iframe
+                    src="/uploads/waterBills/${file}#toolbar=0&navpanes=0&scrollbar=0"
+                    width="250"
+                    height="250"
+                    style="
+                      border:none;
+                      border-radius:12px;
+                      background:white;
+                      box-shadow:0 4px 10px rgba(0,0,0,0.15);
+                      pointer-events:none;
+                      display:block;
+                    ">
+                  </iframe>
+                </a>
+              `
+              : '<p>No bill file uploaded.</p>'
+          }
+        </div>
+      </div>
+
+      ${approvalSection}
+    `;
+
+    tableBox.style.display = 'none';
+    viewPanel.style.display = 'block';
+  }
+
+  function closeView() {
+    document.getElementById('viewPanel').style.display = 'none';
+    document.querySelector('.table-box').style.display = 'block';
+  }
+
+  function filterBills(status, clickedTab) {
+    const rows = document.querySelectorAll('#tableBody tr');
+    const tabs = document.querySelectorAll('.status-row .status');
+
+    tabs.forEach(tab => tab.classList.remove('active'));
+    clickedTab.classList.add('active');
+
+    rows.forEach(row => {
+      if (row.dataset.status === status) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+</script>
 
 </body>
 </html>

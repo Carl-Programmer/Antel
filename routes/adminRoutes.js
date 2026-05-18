@@ -14,13 +14,6 @@ const WaterPayment = require('../models/WaterPayment');
 // Admin Dashboard Routes
 //===========================================
 
-// 📊 Dashboard
-router.get('/dashboard', (req, res) => {
-  res.render('admin/dashboard', {
-    title: 'Admin Dashboard',
-    page: 'dashboard'
-  });
-});
 
 // 👥 Manage Users (MERGED ROUTE: Fetches DB data AND renders page)
 router.get('/users', async (req, res) => {
@@ -74,17 +67,7 @@ router.get('/feedbacks', (req, res) => {
     page: 'feedbacks'
   });
 });
-// WATER
-router.get('/bills/water/manageWater', async (req, res) => {
-  const approvalCount = await WaterPayment.countDocuments({
-    status: 'pending'
-  });
 
-  res.render('admin/bills/water/manageWater', {
-    title: 'Manage Water Bills',
-    approvalCount
-  });
-});
 
 // MAINTENANCE
 router.get('/bills/maintenance/uploadMaintenance', (req, res) => {
@@ -97,6 +80,59 @@ router.get('/bills/maintenance/manageMaintenance', (req, res) => {
   res.render('admin/bills/maintenance/manageMaintenance', {
     title: 'Manage Maintenance Bills'
   });
+});
+
+// =======================================================
+// 📊 ADMIN DASHBOARD
+// =======================================================
+
+
+// =======================================================
+// 📊 ADMIN DASHBOARD
+// =======================================================
+router.get('/dashboard', async (req, res) => {
+  try {
+    // Count all users
+    const totalUsers = await User.countDocuments({});
+
+    // Count unpaid and overdue water bills
+    // Since your WaterBill model defaults to status: 'unpaid',
+    // this will count all unpaid bills, including overdue ones
+    const pendingDues = await WaterBill.countDocuments({
+      status: { $in: ['unpaid', 'due'] }
+    });
+
+    // Count active gym memberships
+    // If none are marked as 'active' yet, also count 'approved'
+    const gymMembers = await Membership.countDocuments({
+      status: { $in: ['active', 'approved'] }
+    });
+
+    // Render dashboard with actual values
+    res.render('admin/dashboard', {
+      title: 'Dashboard',
+      totalUsers,
+      pendingDues,
+      appointments: 0,
+      gymMembers,
+      otherConcerns: 0,
+      feedbacks: 0
+    });
+
+  } catch (err) {
+    console.error('Dashboard Error:', err);
+
+    // Fallback values so the page still loads
+    res.render('admin/dashboard', {
+      title: 'Dashboard',
+      totalUsers: 0,
+      pendingDues: 0,
+      appointments: 0,
+      gymMembers: 0,
+      otherConcerns: 0,
+      feedbacks: 0
+    });
+  }
 });
 //===========================================
 // User Approval Actions
@@ -227,9 +263,10 @@ router.post('/users/edit/:id', async (req, res) => {
 });
 
 
+// ======================================
 // POST Archive User Account
-// Final URL: /admin/users/archive/:id
-// Redirects to the Users page (users.ejs) via /admin/users
+// URL: /admin/users/archive/:id
+// ======================================
 router.post('/users/archive/:id', async (req, res) => {
   try {
     // Only allow admins
@@ -249,10 +286,42 @@ router.post('/users/archive/:id', async (req, res) => {
     }
 
     req.session.message = '📦 User account archived successfully.';
-    return res.redirect('/admin/users'); // loads users.ejs
+    return res.redirect('/admin/users');
   } catch (err) {
     console.error('Error archiving user:', err);
     req.session.message = '❌ Error archiving user.';
+    return res.redirect('/admin/users');
+  }
+});
+
+
+// ======================================
+// POST Unarchive User Account
+// URL: /admin/users/unarchive/:id
+// ======================================
+router.post('/users/unarchive/:id', async (req, res) => {
+  try {
+    // Only allow admins
+    if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/login');
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { status: 'active' }, // Restore archived user to active status
+      { new: true }
+    );
+
+    if (!user) {
+      req.session.message = '❌ User not found.';
+      return res.redirect('/admin/users');
+    }
+
+    req.session.message = '📂 User account unarchived successfully.';
+    return res.redirect('/admin/users');
+  } catch (err) {
+    console.error('Error unarchiving user:', err);
+    req.session.message = '❌ Error unarchiving user.';
     return res.redirect('/admin/users');
   }
 });
@@ -324,27 +393,104 @@ router.post('/bills/water/upload', upload.single('bill'), async (req, res) => {
     res.status(500).send('Upload failed');
   }
 });
-
 // =======================================================
-// 💳 WATER BILL PAYMENT APPROVAL
+// 💧 MANAGE WATER BILLS (Dynamic Tabs)
 // =======================================================
-router.get('/bills/water/paymentApproval', async (req, res) => {
+router.get('/bills/water/manageWater', async (req, res) => {
   try {
-    const payments = await WaterPayment.find({
-      status: 'pending'
-    })
-      .populate('user')
-      .populate('bill')
-      .sort({ uploadedAt: -1 });
+    const tab = req.query.tab || 'unpaid';
+    const now = new Date();
 
-    res.render('admin/bills/water/paymentApproval', {
-      title: 'Water Bill Payment Approval',
-      payments
+    const firstDayOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1
+    );
+
+    const lastDayOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+      23, 59, 59, 999
+    );
+
+    // Counts for all tabs
+    const unpaidCount = await WaterBill.countDocuments({
+      status: 'unpaid',
+      dueDate: {
+        $gte: now,
+        $lte: lastDayOfMonth
+      }
+    });
+
+    const approvalCount = await WaterPayment.countDocuments({
+      status: 'pending'
+    });
+
+    const dueCount = await WaterBill.countDocuments({
+      status: 'unpaid',
+      dueDate: { $lt: now }
+    });
+
+    const completedCount = await WaterBill.countDocuments({
+      status: 'paid'
+    });
+
+    // Determine which data to load
+    let bills = [];
+    let payments = [];
+
+    if (tab === 'approval') {
+      payments = await WaterPayment.find({ status: 'pending' })
+        .populate('user')
+        .populate('bill')
+        .sort({ uploadedAt: -1 });
+    }
+
+    else if (tab === 'due') {
+      bills = await WaterBill.find({
+        status: 'unpaid',
+        dueDate: { $lt: now }
+      })
+        .populate('user')
+        .sort({ dueDate: 1 });
+    }
+
+    else if (tab === 'completed') {
+      bills = await WaterBill.find({
+        status: 'paid'
+      })
+        .populate('user')
+        .sort({ paidAt: -1 });
+    }
+
+    else {
+      // unpaid (default)
+      bills = await WaterBill.find({
+        status: 'unpaid',
+        dueDate: {
+          $gte: now,
+          $lte: lastDayOfMonth
+        }
+      })
+        .populate('user')
+        .sort({ dueDate: 1 });
+    }
+
+    res.render('admin/bills/water/manageWater', {
+      title: 'Manage Water Bills',
+      tab,
+      bills,
+      payments,
+      unpaidCount,
+      approvalCount,
+      dueCount,
+      completedCount
     });
 
   } catch (err) {
     console.error(err);
-    res.status(500).send('Error loading payment approvals.');
+    res.status(500).send('Error loading water bills.');
   }
 });
 

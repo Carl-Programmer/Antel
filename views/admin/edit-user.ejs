@@ -216,16 +216,30 @@
         </form>
 
             <!-- Archive Form -->
-            <form
-              action="/admin/users/archive/<%= user._id %>"
-              method="POST"
-              onsubmit="return confirm('Archive this account?')"
-            >
-              <button type="submit" class="btn btn-archive">
-                <img src="/img/archive-logo.png">
-                Archive this Account
-              </button>
-            </form>
+<!-- Archive / Unarchive Form -->
+<% if (user.status === 'archived') { %>
+  <form
+    action="/admin/users/unarchive/<%= user._id %>"
+    method="POST"
+    onsubmit="return confirm('Unarchive this account?')"
+  >
+    <button type="submit" class="btn btn-archive">
+      <img src="/img/archive-logo.png">
+      Unarchive this Account
+    </button>
+  </form>
+<% } else { %>
+  <form
+    action="/admin/users/archive/<%= user._id %>"
+    method="POST"
+    onsubmit="return confirm('Archive this account?')"
+  >
+    <button type="submit" class="btn btn-archive">
+      <img src="/img/archive-logo.png">
+      Archive this Account
+    </button>
+  </form>
+<% } %>
 
           </div>
 

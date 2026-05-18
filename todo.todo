@@ -11,8 +11,9 @@ make annoucement dynamic
 
 ADMIN
 
+dashboard values - done
 Show users in admin - done
-Edit users
+Edit users - pending
 Create post to user side
 
 Flow
@@ -20,26 +21,32 @@ Flow
 After Bill payment posting by admin it will appear in (for payment approval tab) in manage accounts
 when the user payed their bill
 
+it should not add with previous bill instead show a list of bills in pay and only display the latest amount in balance amount
+
+Account
+test@gmail.com = Usertest_123
+admin@antel.com = admin123
 
 
 BUG
 
 User Side
 
-Change Password inside settings not working - pending
+Change Password inside settings not working/not saving - done
 
 Forgot password
-Still accepts weak/ short passwords. must be 12 chars includes upper,lower,symbols and numbers - pending
+Still accepts weak/ short passwords. must be 12 chars includes upper,lower,symbols and numbers - done
 
 Payment History
 -New added bill still listed
--Current balance adds with prev bills
--New bill not loading when clicked pay now; prev bill still appear
+-Current balance adds with prev bills (fixed) - done
+-New bill not loading when clicked pay now; prev bill still appear (fixed) - done
 
 Admin Side
 
 Manage users
-No roles editor (admin/user) - pending
+No roles editor (admin/user) - done
+add unarchive
 
 Fitness Station
 No actions available aside on  approved

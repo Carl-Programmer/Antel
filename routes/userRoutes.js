@@ -59,20 +59,22 @@ router.get('/settings', (req, res) => {
 router.get('/water-bill', async (req, res) => {
   try {
 
+    if (!req.session.user) {
+      return res.redirect('/login');
+    }
+
     // logged in user
     const userId = req.session.user._id;
 
     // get bills for this user
     const bills = await WaterBill.find({
       user: userId
-    }).sort({ uploadedAt: -1 });
+    }).sort({ _id: -1 });
 
-    // compute total balance
-    let balance = 0;
-
-    bills.forEach(bill => {
-      balance += Number(bill.amount || 0);
-    });
+    //latesst bill amount
+    const balance = bills.length > 0
+    ? Number(bills[0].amount || 0)
+    : 0;
 
     console.log("USER ID:", userId);
     console.log("BILLS:", bills);
@@ -110,7 +112,7 @@ router.get('/water-bill-pay', async (req, res) => {
     const bill = await WaterBill.findOne({
       user: userId,
       status: 'unpaid'
-    }).sort({ dueDate: 1 });
+    }).sort({ _id: -1 });
 
     // If there is no unpaid bill
     if (!bill) {
@@ -299,7 +301,7 @@ router.get('/change-password', (req, res) => {
 
 
 // POST Change Password
-router.post('/users/change-password', async (req, res) => {
+router.post('/change-password', async (req, res) => {
   try {
     // User must be logged in
     if (!req.session.user) {
@@ -322,13 +324,13 @@ router.post('/users/change-password', async (req, res) => {
 
     if (!isMatch) {
       req.session.message = '❌ Incorrect current password.';
-      return res.redirect('/users/change-password');
+      return res.redirect('/user/change-password');
     }
 
     // Check if new passwords match
     if (newPassword !== confirmPassword) {
       req.session.message = '❌ Passwords do not match.';
-      return res.redirect('/users/change-password');
+      return res.redirect('/user/change-password');
     }
 
     // Strong password validation:
@@ -343,7 +345,7 @@ router.post('/users/change-password', async (req, res) => {
     if (!strongPasswordRegex.test(newPassword)) {
       req.session.message =
         '❌ Password must be at least 12 characters and include uppercase, lowercase, number, and special character.';
-      return res.redirect('/users/change-password');
+      return res.redirect('/user/change-password');
     }
 
     // Prevent reusing the current password
@@ -352,7 +354,7 @@ router.post('/users/change-password', async (req, res) => {
     if (sameAsCurrent) {
       req.session.message =
         '❌ New password must be different from your current password.';
-      return res.redirect('/users/change-password');
+      return res.redirect('/user/change-password');
     }
 
     // Save new password
@@ -362,12 +364,12 @@ router.post('/users/change-password', async (req, res) => {
 
     // Success message
     req.session.message = '✅ Password successfully updated!';
-    return res.redirect('/users/change-password');
+    return res.redirect('/user/change-password');
 
   } catch (err) {
     console.error('Error changing password:', err);
     req.session.message = '❌ Server error changing password.';
-    return res.redirect('/users/change-password');
+    return res.redirect('/user/change-password');
   }
 });
 

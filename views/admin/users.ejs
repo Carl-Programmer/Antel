@@ -13,8 +13,54 @@
 
   <div class="main">
 
-    <h2>User List</h2>
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="search">
+    <input type="text" id="searchInput" placeholder="Search users...">
+    <button type="button">🔍</button>
+  </div>
 
+  <div class="filters">
+    <!-- Village Filter -->
+    <select id="villageFilter">
+      <option value="">Village: All</option>
+      <% 
+        const villages = [...new Set(users.map(u => u.village).filter(Boolean))];
+        villages.forEach(village => { 
+      %>
+        <option value="<%= village %>"><%= village %></option>
+      <% }) %>
+    </select>
+
+    <!-- Block Filter -->
+    <select id="blockFilter">
+      <option value="">Block: All</option>
+      <% 
+        const blocks = [...new Set(users.map(u => u.blockLot).filter(Boolean))];
+        blocks.forEach(block => { 
+      %>
+        <option value="<%= block %>"><%= block %></option>
+      <% }) %>
+    </select>
+
+    <!-- Role Filter -->
+    <select id="roleFilter">
+      <option value="">Role: All</option>
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <!-- Status Filter -->
+    <select id="statusFilter">
+      <option value="">Status: All</option>
+      <option value="pending">Pending</option>
+      <option value="active">Active</option>
+      <option value="rejected">Rejected</option>
+      <option value="deactivated">Deactivated</option>
+      <option value="archived">Archived</option>
+    </select>
+  </div>
+</div>
     <table>
       <thead>
         <tr>
@@ -29,36 +75,45 @@
         </tr>
       </thead>
 
-      <tbody>
-        <% users.forEach(user => { %>
-          <tr>
-            <td><%= user.referenceNumber || 'N/A' %></td>
-            <td><%= user.givenName %> <%= user.surname %></td>
-            <td><%= user.email %></td>
-            <td><%= user.village %></td>
-            <td><%= user.blockLot %></td>
-            <td><%= user.role %></td>
-            
-            <td>
-              <select class="status-select" data-id="<%= user._id %>" style="padding: 4px;">
-                <option value="pending" <%= user.status === 'pending' ? 'selected' : '' %>>Pending</option>
-                <option value="active" <%= user.status === 'active' ? 'selected' : '' %>>Active</option>
-                <option value="rejected" <%= user.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
-                <option value="deactivated" <%= user.status === 'deactivated' ? 'selected' : '' %>>Deactivated</option>
-              </select>
-            </td>
+<tbody>
+  <% users.forEach(user => { %>
+    <tr
+      data-name="<%= (((user.givenName || '') + ' ' + (user.surname || '')).trim()).toLowerCase() %>"
+      data-email="<%= (user.email || '').toLowerCase() %>"
+      data-reference="<%= (user.referenceNumber || '').toLowerCase() %>"
+      data-village="<%= (user.village || '').toLowerCase() %>"
+      data-block="<%= (user.blockLot || '').toLowerCase() %>"
+      data-role="<%= (user.role || '').toLowerCase() %>"
+      data-status="<%= (user.status || '').toLowerCase() %>"
+    >
+      <td><%= user.referenceNumber || 'N/A' %></td>
+      <td><%= (user.givenName || '') %> <%= (user.surname || '') %></td>
+      <td><%= user.email || 'N/A' %></td>
+      <td><%= user.village || 'N/A' %></td>
+      <td><%= user.blockLot || 'N/A' %></td>
+      <td><%= user.role || 'N/A' %></td>
 
-<td>
-  <a
-    href="/admin/users/edit/<%= user._id %>"
-    style="text-decoration: none; padding: 4px 8px; background: blue; color: white; border-radius: 4px;"
-  >
-    Edit
-  </a>
-</td>
-          </tr>
-        <% }) %>
-      </tbody>
+      <td>
+        <select class="status-select" data-id="<%= user._id %>" style="padding: 4px;">
+          <option value="pending" <%= user.status === 'pending' ? 'selected' : '' %>>Pending</option>
+          <option value="active" <%= user.status === 'active' ? 'selected' : '' %>>Active</option>
+          <option value="rejected" <%= user.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+          <option value="deactivated" <%= user.status === 'deactivated' ? 'selected' : '' %>>Deactivated</option>
+          <option value="archived" <%= user.status === 'archived' ? 'selected' : '' %>>Archived</option>
+        </select>
+      </td>
+
+      <td>
+        <a
+          href="/admin/users/edit/<%= user._id %>"
+          style="text-decoration: none; padding: 4px 8px; background: blue; color: white; border-radius: 4px;"
+        >
+          Edit
+        </a>
+      </td>
+    </tr>
+  <% }) %>
+</tbody>
 
     </table>
 
@@ -66,6 +121,68 @@
 </div>
 
 <script>
+  // ==========================
+  // FILTER USERS
+  // ==========================
+  const searchInput = document.getElementById('searchInput');
+  const villageFilter = document.getElementById('villageFilter');
+  const blockFilter = document.getElementById('blockFilter');
+  const roleFilter = document.getElementById('roleFilter');
+  const statusFilter = document.getElementById('statusFilter');
+
+  function filterUsers() {
+    const search = searchInput.value.toLowerCase().trim();
+    const village = villageFilter.value.toLowerCase().trim();
+    const block = blockFilter.value.toLowerCase().trim();
+    const role = roleFilter.value.toLowerCase().trim();
+    const status = statusFilter.value.toLowerCase().trim();
+
+    document.querySelectorAll('tbody tr').forEach(row => {
+      const name = (row.dataset.name || '').toLowerCase().trim();
+      const email = (row.dataset.email || '').toLowerCase().trim();
+      const reference = (row.dataset.reference || '').toLowerCase().trim();
+      const rowVillage = (row.dataset.village || '').toLowerCase().trim();
+      const rowBlock = (row.dataset.block || '').toLowerCase().trim();
+      const rowRole = (row.dataset.role || '').toLowerCase().trim();
+
+      // IMPORTANT:
+      // Read the current value of the status dropdown instead of relying
+      // on data-status, which becomes outdated after status changes.
+      const statusSelect = row.querySelector('.status-select');
+      const rowStatus = statusSelect
+        ? statusSelect.value.toLowerCase().trim()
+        : '';
+
+      // Search matches name, email, or reference number
+      const matchesSearch =
+        !search ||
+        name.includes(search) ||
+        email.includes(search) ||
+        reference.includes(search);
+
+      const matchesVillage = !village || rowVillage === village;
+      const matchesBlock = !block || rowBlock === block;
+      const matchesRole = !role || rowRole === role;
+      const matchesStatus = !status || rowStatus === status;
+
+      row.style.display =
+        matchesSearch &&
+        matchesVillage &&
+        matchesBlock &&
+        matchesRole &&
+        matchesStatus
+          ? ''
+          : 'none';
+    });
+  }
+
+  // Listen for changes
+  searchInput.addEventListener('input', filterUsers);
+  villageFilter.addEventListener('change', filterUsers);
+  blockFilter.addEventListener('change', filterUsers);
+  roleFilter.addEventListener('change', filterUsers);
+  statusFilter.addEventListener('change', filterUsers);
+
   document.querySelectorAll('.status-select').forEach(select => {
     select.addEventListener('change', async (e) => {
       const userId = e.target.getAttribute('data-id');
